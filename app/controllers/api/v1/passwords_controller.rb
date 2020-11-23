@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::PasswordsController < Devise::PasswordsController
-  # before_action :check_valid_token ,only: [:edit]
+  before_action :check_valid_token ,only: [:edit]
   # GET /resource/password/new
   def new
     # super
@@ -10,13 +10,13 @@ class Api::V1::PasswordsController < Devise::PasswordsController
   # POST /resource/password
   def create
     # super
-    # @user = User.find_by_email(params[:user][:email])
-    # if @user.present?
-    #  @user.send_reset_password_instructions
-    #  render json: {message: "updated"}
-    # else
-    #     render json: {message: "no such email is present"}
-    # end
+    @user = User.find_by_email(params[:user][:email])
+    if @user.present?
+     @user.send_reset_password_instructions
+     render json: {message: "Reset link sent to your email"}
+    else
+        render json: {message: "no such email is present"}
+    end
   end
 
   # GET /resource/password/edit?reset_password_token=abcdef
@@ -60,11 +60,11 @@ class Api::V1::PasswordsController < Devise::PasswordsController
   private
 
   def check_valid_token
-    # @user = User.find_by!(reset_password_token: params[:reset_password_token])
-    # @flag = true if @user.present?
-    # rescue ActiveRecord::RecordNotFound
-    #   @flag = false
-      # render json: {message: "Inavlid token"}
+    @user = User.find_by!(reset_password_token: params[:reset_password_token])
+    @flag = true if @user.present?
+    rescue ActiveRecord::RecordNotFound
+      @flag = false
+      render json: {message: "Inavlid token"}
   end
   # protected
 
