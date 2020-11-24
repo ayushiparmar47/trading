@@ -27,13 +27,7 @@ test:
   host: localhost
   database: trading
 
-# production:
-#   <<: *default
-#   # database: db/production.sqlite3
-#   host: localhost
-#   adapter: mysql2
-#   database: trading
-#   port: 3306
-#   username: root
-#   password: root
-#   encoding: utf8
+production:
+  <<: *default
+  host: localhost
+  database: trading
