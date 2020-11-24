@@ -22,7 +22,6 @@ development:
   username: root
   password: root
   encoding: utf8
-  socket: /var/run/mysqld/mysqld.sock
 
 
 # Warning: The database defined as "test" will be erased and
@@ -38,7 +37,6 @@ test:
   username: root
   password: root
   encoding: utf8
-  socket: /var/run/mysqld/mysqld.sock
 
 production:
   <<: *default
@@ -50,4 +48,3 @@ production:
   username: root
   password: root
   encoding: utf8
-  socket: /var/run/mysqld/mysqld.sock
