@@ -12,7 +12,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def create
     user = User.new(user_params)
     if user.save
-      render json: {success: true, message: "User is created"}
+      render json: {success: true, message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}
     else
       msg = user.errors.full_messages
       render json: {success: false, message: msg}
