@@ -19,8 +19,8 @@ class Api::V1::ConfirmationsController < Devise::ConfirmationsController
     if resource.errors.empty?
       # set_flash_message!(:notice, :confirmed)
       # respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
-      # redirect_to "http://www.rubyonrails.org"
-      render json: {message: "Confirmation done. This will redirect to sign in screen"}
+      redirect_to "http://www.rubyonrails.org"
+      # render json: {message: "Confirmation done. This will redirect to sign in screen"}
     else
       respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
