@@ -12,7 +12,9 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def create
     user = User.new(user_params)
     if user.save
-      render json: {success: true, message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}
+      token = Tiddle.create_and_return_token(user, request)
+      render json: { success: true, user: user.as_json.merge({token: token}), message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}      
+      #render json: {success: true, message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}
     else
       msg = user.errors.full_messages
       render json: {success: false, message: msg}
@@ -26,7 +28,9 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   # PUT /api/v1/users
   def update
-    if current_api_v1_user.present? && current_api_v1_user.update(user_params)
+    #if current_api_v1_user.present? && current_api_v1_user.update(user_params)
+    if current_api_v1_user.present?
+      current_api_v1_user.update(email: params[:email], first_name: params[:first_name], image: params[:image])
       render json: {success: true, user: current_api_v1_user, message: "Successfully updated user"}
     else
       render json: {success: false, user: current_api_v1_user, message: current_api_v1_user.errors.full_messages.to_sentence}
@@ -55,7 +59,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   # end
   def user_params
     # devise_parameter_sanitizer.permit(:user, keys: [:email,:password])
-    params.require(:user).permit(:email,:password,:first_name) 
+    params.require(:user).permit(:email,:password,:first_name, :image) 
   end
 
 

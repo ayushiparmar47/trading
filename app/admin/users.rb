@@ -1,18 +1,51 @@
 ActiveAdmin.register User do
+  permit_params :first_name, :email, :password, :password_confirmation, :image
 
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
-  # permit_params :first_name, :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:first_name, :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
+  index do
+    selectable_column
+    id_column
+    column :first_name
+    column :email
+    column :image do |user|
+      image_path = "#{user.image_url}"
+      link_to(image_path, image_path, target: :_blank) 
+    end
+    column :current_sign_in_at
+    column :created_at
+    actions
+  end
+
+  filter :first_name
+  filter :email
+  filter :current_sign_in_at
+  filter :created_at
+
+  form do |f|
+    f.inputs do
+      f.input :first_name
+      f.input :email
+      f.input :password
+      f.input :password_confirmation
+      f.input :image, :as => :file, :label => "Image", :hint => f.object.image.present? \
+        ? link_to("#{f.object&.image&.url}", "#{f.object&.image&.url}", target: :_blank)
+        : content_tag(:span, "Please upload Image")
+      f.input :image_cache, :as => :hidden    
+    end
+    f.actions
+  end
+
+  show do
+    attributes_table do
+      row :first_name
+      row :email
+      row :image do |user|
+        image_path = "#{user.image_url}"
+        link_to(image_path, image_path, target: :_blank) 
+      end
+      row :current_sign_in_at
+      row :sign_in_count
+      row :created_at
+    end
+  end
   
 end

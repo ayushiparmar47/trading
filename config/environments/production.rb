@@ -88,10 +88,12 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => "desolate-ravine-19733.herokuapp.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-  address:              'smtp.gmail.com',
-  port:                 587,
-  domain:               'gmail.com',
-  user_name:            'parmarayushi17@gmail.com',
-  password:             'shishi1234',
-  authentication:       'plain' }
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'gmail.com',
+    user_name:            'parmarayushi17@gmail.com',
+    password:             'shishi1234',
+    authentication:       'plain' 
+  }
+  config.asset_host = 'https://desolate-ravine-19733.herokuapp.com'
 end
