@@ -31,7 +31,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable
 
-  validates :email, presence: true, if: :domain_check
+  # validates :email, presence: true, if: :domain_check
+  validates :email, presence: true
 
 	def domain_check
 		if email.present?
