@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   		namespace :v1 do
   			devise_for :users
   			# post "/sign_up" => "registrations#create"  		
-  			resources :users , only: :index  			
+  			resources :users , only: :index 
+        resources :contacts, only: :create 			
   		end
 	end
   devise_for :admin_users, ActiveAdmin::Devise.config
