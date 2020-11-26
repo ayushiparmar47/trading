@@ -33,6 +33,7 @@ class User < ApplicationRecord
 
   # validates :email, presence: true, if: :domain_check
   validates :email, presence: true
+  validates :password, length: { in: 6..20 }, presence: true
 
 	def domain_check
 		if email.present?

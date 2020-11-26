@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   			devise_for :users
   			# post "/sign_up" => "registrations#create"  		
   			resources :users , only: :index 
-        resources :contacts, only: :create 			
+        resources :contacts, only: :create
+        post "/reset_password" => "users#reset_password" 			
   		end
 	end
   devise_for :admin_users, ActiveAdmin::Devise.config
