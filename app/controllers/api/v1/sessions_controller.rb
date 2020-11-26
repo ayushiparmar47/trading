@@ -11,7 +11,7 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   # POST /api/v1/users/sign_in
   def create
-    params[:user] = JSON.parse(params[:user])
+    # params[:user] = JSON.parse(params[:user])
     email = params[:user][:email]
     if User.find_by_email(email)
       user = User.find_by_email(email)
