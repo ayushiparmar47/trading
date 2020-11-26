@@ -10,6 +10,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   # POST /api/v1/users
   def create
+    params[:user] = JSON.parse(params["user"])
     user = User.new(user_params)
     if user.save
       token = Tiddle.create_and_return_token(user, request)
