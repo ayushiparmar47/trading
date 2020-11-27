@@ -9,13 +9,14 @@ class Api::V1::PasswordsController < Devise::PasswordsController
 
   # POST /resource/password
   def create
-    # super
     @user = User.find_by_email(params[:user][:email])
     if @user.present?
-     @user.send_reset_password_instructions
-     render json: {message: "Reset link sent to your email"}
+      #@user.send_reset_password_instructions
+      @user.generate_password_token!
+      UserMailer.sendMail(@user).deliver
+      render json: {message: "Reset link sent to your email"}
     else
-        render json: {message: "no such email is present"}
+      render json: {message: "no such email is present"}
     end
   end
 
@@ -54,7 +55,17 @@ class Api::V1::PasswordsController < Devise::PasswordsController
   end
   # PUT /resource/password
   def update
-    # super
+    token = params[:reset_password_token].to_s
+    user = User.find_by(reset_password_token: token)
+    if user.present? && user.password_token_valid?
+      if user.reset_password!(params[:user][:password])
+        render json: { success: true, message: "Your password is successful reset !"}
+      else
+        render json: { success: false, error: user.errors.full_messages}, status: :unprocessable_entity
+      end
+    else 
+      render json: { success: false, error: "Inavlid token" }, status: :unprocessable_entity 
+    end
   end
   
   private
