@@ -58,11 +58,15 @@ class Api::V1::PasswordsController < Devise::PasswordsController
     token = params[:reset_password_token].to_s
     user = User.find_by(reset_password_token: token)
     if user.present? && user.password_token_valid?
-      if user.reset_password!(params[:user][:password])
-        render json: { success: true, message: "Your password is successful reset !"}
+      if params[:user][:password] == params[:user][:confirm_password]
+        if user.reset_password!(params[:user][:password])
+          render json: { success: true, message: "Your password is successful reset !"}
+        else
+          render json: { success: false, error: user.errors.full_messages}, status: :unprocessable_entity
+        end
       else
-        render json: { success: false, error: user.errors.full_messages}, status: :unprocessable_entity
-      end
+        render json: { success: false, error: "Password does not match with confirm password !" }, status: :unprocessable_entity
+      end  
     else 
       render json: { success: false, error: "Inavlid token" }, status: :unprocessable_entity 
     end
