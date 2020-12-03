@@ -1,7 +1,7 @@
 class NewsLetter < ApplicationRecord
 	mount_uploader :image, ImageUploader
 
-	after_update :send_news_letter
+	after_save :send_news_letter
 
 	def send_news_letter
 		puts "-------send_news_letter--------"
