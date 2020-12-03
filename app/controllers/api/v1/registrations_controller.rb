@@ -2,6 +2,7 @@
 
 class Api::V1::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
+  before_action :authenticate_api_v1_user!, only: [:edit,:update]
   # before_action :configure_account_update_params, only: [:update]
   # before_action :configure_permitted_parameters
   # GET /resource/sign_up
@@ -22,19 +23,30 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  # GET /api/v1/users/edit
+  def edit
+    if current_api_v1_user.present?
+      render json: {success: true, user: current_api_v1_user}
+    else
+      render json: {success: false, message: "login first"}
+    end
+  end
 
   # PUT /api/v1/users
   def update
-    #if current_api_v1_user.present? && current_api_v1_user.update(user_params)
     if current_api_v1_user.present?
-      current_api_v1_user.update(email: params[:email], first_name: params[:first_name], image: params[:image])
-      render json: {success: true, user: current_api_v1_user, message: "Successfully updated user"}
+      current_api_v1_user.update(email: params[:email], first_name: params[:first_name], image: params[:image], short_bio: params[:short_bio])
+      if current_api_v1_user.errors.messages.blank?
+        if current_api_v1_user.email != params[:email]
+          render json: {success: true, user: current_api_v1_user, message: "Since you have changed your email, a confirmation mail has been sent to your updated mail id. Please confirm it before proceed."}
+        else
+          render json: {success: true, user: current_api_v1_user, message: "Successfully updated user"}
+        end
+      else
+        render json: {success: false, user: current_api_v1_user, message: current_api_v1_user.errors.messages}, status: 404
+      end
     else
-      render json: {success: false, user: current_api_v1_user, message: current_api_v1_user.errors.full_messages.to_sentence}
+      render json: {success: false, user: current_api_v1_user, message: current_api_v1_user.errors.full_messages.to_sentence}, status: 404
     end
   end
 
