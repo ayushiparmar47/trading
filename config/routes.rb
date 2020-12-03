@@ -3,9 +3,11 @@ Rails.application.routes.draw do
   		namespace :v1 do
   			devise_for :users
   			# post "/sign_up" => "registrations#create"  		
-  			resources :users , only: :index 
+  			resources :users , only: [:index,:show] 
         resources :contacts, only: :create
-        post "/reset_password" => "users#reset_password" 			
+        post "/reset_password" => "users#reset_password"
+        resources :companies , only: [:index] 	
+        post "/set_news_letter" => "users#set_news_letter"		
   		end
 	end
   devise_for :admin_users, ActiveAdmin::Devise.config

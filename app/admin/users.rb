@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :email, :password, :password_confirmation, :image
+  permit_params :first_name, :email, :password, :password_confirmation, :image, :news_letter
 
   index do
     selectable_column
@@ -10,6 +10,7 @@ ActiveAdmin.register User do
       image_path = "#{user.image_url}"
       link_to(image_path, image_path, target: :_blank) 
     end
+    column :news_letter
     column :current_sign_in_at
     column :created_at
     actions
@@ -17,6 +18,7 @@ ActiveAdmin.register User do
 
   filter :first_name
   filter :email
+  filter :news_letter
   filter :current_sign_in_at
   filter :created_at
 
@@ -30,6 +32,7 @@ ActiveAdmin.register User do
         ? link_to("#{f.object&.image&.url}", "#{f.object&.image&.url}", target: :_blank)
         : content_tag(:span, "Please upload Image")
       f.input :image_cache, :as => :hidden    
+      f.input :news_letter, as: :boolean
     end
     f.actions
   end
@@ -42,6 +45,7 @@ ActiveAdmin.register User do
         image_path = "#{user.image_url}"
         link_to(image_path, image_path, target: :_blank) 
       end
+      row :news_letter
       row :current_sign_in_at
       row :sign_in_count
       row :created_at
