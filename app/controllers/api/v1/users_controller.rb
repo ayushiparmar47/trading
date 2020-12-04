@@ -1,12 +1,15 @@
 class Api::V1::UsersController < ApplicationController
-	before_action :authenticate_api_v1_user!, only: [:index, :reset_password, :user_details]
-	# get "/api/v1/users"
+
+	before_action :authenticate_api_v1_user!, only: [:index, :reset_password, :user_details, :set_news_letter]
+
 	def index
 		@users = User.all
 		render json: {success: true, message: @users}
 	end
+
 	# post /api/v1/reset_password
   def reset_password
+    params[:user] = JSON.parse(params["user"])
     if current_api_v1_user.present? 
       if (params[:user][:new_password]) == (params[:user][:confirm_password])
         if current_api_v1_user.update(password: params[:user][:new_password]) and current_api_v1_user.errors.blank?
@@ -25,6 +28,32 @@ class Api::V1::UsersController < ApplicationController
   def user_details
     if current_api_v1_user.present?
       render json: {success: true, user: current_api_v1_user.as_json, message: "User details."}
+    else
+      render json: {success: false, message: "Sign in first."}
+    end
+  end
+
+  # POST /api/v1/set_news_letter
+  def set_news_letter
+    if current_api_v1_user.present? 
+      if params[:user][:email].present?
+        user = User.find_by_email params[:user][:email]
+        if user.present? 
+          unless user.news_letter
+            if user.update(news_letter: true) and user.errors.blank?
+              render json: {success: true, message: "Successfully subscribed."}
+            else
+              render json: {success: false, message: user.errors.messages}
+            end
+          else
+            render json: {success: false, message: "You have already subscribed"}
+          end
+        else
+          render json: {success: false, message: "user not found with this email."}
+        end
+      else
+        render json: {success: false, message: "Please enter email id."}
+      end
     else
       render json: {success: false, message: "Sign in first."}
     end
