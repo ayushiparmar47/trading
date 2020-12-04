@@ -27,6 +27,8 @@ class User < ApplicationRecord
 	]
 
   has_many :authentication_tokens, dependent: :destroy
+  has_many :plan_subscriptions
+  has_many :plans, through: :plan_subscriptions, dependent: :destroy
   
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable

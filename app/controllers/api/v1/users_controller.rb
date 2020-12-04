@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-	before_action :authenticate_api_v1_user!, only: [:index,:reset_password]
+	before_action :authenticate_api_v1_user!, only: [:index, :reset_password, :user_details]
 	# get "/api/v1/users"
 	def index
 		@users = User.all
@@ -21,4 +21,13 @@ class Api::V1::UsersController < ApplicationController
       render json: {success: false, message: "Sign in first."}
     end
   end
+
+  def user_details
+    if current_api_v1_user.present?
+      render json: {success: true, user: current_api_v1_user.as_json, message: "User details."}
+    else
+      render json: {success: false, message: "Sign in first."}
+    end
+  end
+
 end

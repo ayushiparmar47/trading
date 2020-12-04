@@ -4,13 +4,17 @@ ActiveAdmin.register User do
   index do
     selectable_column
     id_column
+    column :image do |user|
+      if user.image.present?
+        image_path = "#{user.image_url}"
+      else
+        image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+      end
+      image_tag image_path 
+    end
     column :first_name
     column :email
-    column :image do |user|
-      image_path = "#{user.image_url}"
-      link_to(image_path, image_path, target: :_blank) 
-    end
-    column :current_sign_in_at
+    column :plan
     column :created_at
     actions
   end
@@ -36,12 +40,17 @@ ActiveAdmin.register User do
 
   show do
     attributes_table do
+      row :image do |user|
+        if user.image.present?
+          image_path = "#{user.image_url}"
+        else
+          image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+        end
+        image_tag image_path  
+      end
       row :first_name
       row :email
-      row :image do |user|
-        image_path = "#{user.image_url}"
-        link_to(image_path, image_path, target: :_blank) 
-      end
+      row :plan
       row :current_sign_in_at
       row :sign_in_count
       row :created_at
