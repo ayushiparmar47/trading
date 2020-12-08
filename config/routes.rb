@@ -7,7 +7,8 @@ Rails.application.routes.draw do
         resources :contacts, only: :create
         post "/reset_password" => "users#reset_password"
         resources :companies , only: [:index] 	
-        post "/set_news_letter" => "users#set_news_letter"		
+        post "/set_news_letter" => "users#set_news_letter"
+        post "/get_company_data_via_webhook" => "companies#get_company_data_via_webhook"	
   		end
 	end
   devise_for :admin_users, ActiveAdmin::Devise.config
