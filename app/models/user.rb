@@ -29,7 +29,8 @@ class User < ApplicationRecord
   has_many :authentication_tokens, dependent: :destroy
   
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable
+         :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable,
+         :omniauthable, :omniauth_providers => [:google_oauth2, :facebook]
 
   # validates :email, presence: true, if: :domain_check
   validates :email, presence: true
@@ -58,6 +59,20 @@ class User < ApplicationRecord
     self.reset_password_token = nil
     self.password = password
     save!
+  end
+
+  def self.from_omniauth(access_token)
+  	debugger
+    data = access_token.info
+    user = User.where(email: data['email']).first
+    unless user
+      user = User.create(
+        name: data['name'],
+        email: data['email'],
+        password: Devise.friendly_token[0,20]
+      )
+    end
+    user
   end
 
   private

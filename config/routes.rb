@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 	namespace :api, defaults: {format: 'json'} do
   		namespace :v1 do
-  			devise_for :users
+  			devise_for :users, controllers: { omniauth_callbacks: 'api/v1/omniauth_callbacks' }
   			# post "/sign_up" => "registrations#create"  		
   			resources :users , only: [:index,:show] 
         resources :contacts, only: :create
