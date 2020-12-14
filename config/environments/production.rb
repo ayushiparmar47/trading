@@ -70,8 +70,6 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.assets.js_compressor = Uglifier.new(:harmony => true)
-
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
@@ -98,5 +96,4 @@ Rails.application.configure do
     authentication:       'plain' 
   }
   config.asset_host = 'https://desolate-ravine-19733.herokuapp.com'
-  
 end
