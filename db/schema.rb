@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_124316) do
+ActiveRecord::Schema.define(version: 2020_12_10_150021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,14 @@ ActiveRecord::Schema.define(version: 2020_11_25_124316) do
     t.index ["user_id"], name: "index_authentication_tokens_on_user_id"
   end
 
+  create_table "companies", force: :cascade do |t|
+    t.string "symbol"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "expected_rate"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -66,6 +74,31 @@ ActiveRecord::Schema.define(version: 2020_11_25_124316) do
     t.boolean "replyed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "news_letters", force: :cascade do |t|
+    t.text "subject"
+    t.text "content"
+    t.string "image"
+    t.boolean "publish"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "referal_codes", force: :cascade do |t|
+    t.string "referal_code"
+    t.float "discount_percent"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "today_trades", force: :cascade do |t|
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "for_free_plan"
+    t.index ["company_id"], name: "index_today_trades_on_company_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -87,10 +120,14 @@ ActiveRecord::Schema.define(version: 2020_11_25_124316) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "image"
+    t.text "short_bio"
+    t.boolean "news_letter"
+    t.string "referral_code"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "authentication_tokens", "users"
+  add_foreign_key "today_trades", "companies"
 end
