@@ -32,7 +32,6 @@ module Tradingg
     # Skip views, helpers and assets when generating a new resource.
     config.autoload_paths += %W(#{config.root}/lib)
     config.api_only = true
-    config.assets.initialize_on_precompile = false
     config.middleware.use Rack::MethodOverride
     config.middleware.use ActionDispatch::Flash
     config.middleware.use ActionDispatch::Cookies
