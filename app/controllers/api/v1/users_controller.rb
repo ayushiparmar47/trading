@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
 	before_action :authenticate_api_v1_user!, only: [:index,:reset_password,:set_news_letter]
-	# get "/api/v1/users"
+	
+  # get "/api/v1/users"
 	def index
 		@users = User.all
 		render json: {success: true, message: @users}
@@ -9,10 +10,6 @@ class Api::V1::UsersController < ApplicationController
 	# post /api/v1/reset_password
   def reset_password
     # params[:user] = JSON.parse(params["user"])
-    puts "---------#{params[:user]}------------------------"
-    puts "---------#{params[:user][:new_password]}------------------------"
-    puts "---------#{params[:user][:confirm_password]}------------------------"
-    Rails.logger.info "-#{params[:user]}-"
     if current_api_v1_user.present? 
       if (params[:user][:new_password]) == (params[:user][:confirm_password])
         if current_api_v1_user.update(password: params[:user][:new_password]) and current_api_v1_user.errors.blank?

@@ -1,0 +1,12 @@
+defaults: &defaults
+  api_key: "bukf81n48v6s9fns33u0"
+ 
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

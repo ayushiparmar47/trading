@@ -8,7 +8,9 @@ Rails.application.routes.draw do
         post "/reset_password" => "users#reset_password"
         resources :companies , only: [:index] 	
         post "/set_news_letter" => "users#set_news_letter"
-        post "/get_company_data_via_webhook" => "companies#get_company_data_via_webhook"	
+        post "/get_company_data_via_webhook" => "companies#get_company_data_via_webhook"
+        get "/get_todays_trades" => "companies#get_todays_trades"	
+        post "/set_analyzed_trades" => "companies#set_analyzed_trades"
   		end
 	end
   devise_for :admin_users, ActiveAdmin::Devise.config
