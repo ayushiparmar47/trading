@@ -1,3 +1,4 @@
+require 'finnhub_api'
 class Api::V1::CompaniesController < ApplicationController
 	before_action :authenticate_api_v1_user!
 
@@ -10,12 +11,20 @@ class Api::V1::CompaniesController < ApplicationController
 		# if current_api_v1_user.plan == "free"
 			# @trades = TodayTrade.where(for_free_plan: true)
 			# @free_trades = fetch_trades @trades
-			# render json: {success: true, data: @free_trades.as_json}, status: 200
+			# if @free_trades.present?
+			# 	render json: {success: true, data: @free_trades.as_json}, status: 200
+			# else
+			# 	render json: {success: false, message: "No trades suggestion is present"}
+			# end
 		# else
 		# RIGHT NOW ALL TRADES WILL BE SHOWN
 			@p_trades = TodayTrade.all
 			@paid_trades = fetch_trades @p_trades
-			render json: {success: true, data: @paid_trades.as_json}, status: 200
+			if @paid_trades.present?
+				render json: {success: true, data: @paid_trades.as_json}, status: 200
+			else
+				render json: {success: false, message: "No trades suggestion is present"}
+			end
 		# end
 		else
 			render json: {success: false, message: "Please Sign in first.."}
