@@ -10,19 +10,20 @@ module FinnhubApi
 
   class << self
   	def get_companies_symbols
-  		# api_token = APP_CONFIG["api_key"]
-  		res = request :get, "https://finnhub.io/api/v1/stock/symbol?exchange=US&token=bukf81n48v6s9fns33u0"
+  		api_token = APP_CONFIG["api_key"]
+  		res = request :get, "https://finnhub.io/api/v1/stock/symbol?exchange=US&token=#{api_token}"
   	end
 
   	def fetch_company_rate symbol
-  		res = request :get, "https://finnhub.io/api/v1/quote?symbol=#{symbol}&token=bukf81n48v6s9fns33u0"
+      api_token = APP_CONFIG["api_key"]
+  		res = request :get, "https://finnhub.io/api/v1/quote?symbol=#{symbol}&token=#{api_token}"
   		current_rate = res["c"]
   		return current_rate
   	end
 
   	def fetch_company_profile symbol
   		api_token = APP_CONFIG["api_key"]
-  		res = request :get, "https://finnhub.io/api/v1/stock/profile2?symbol=#{symbol}&token=bukf81n48v6s9fns33u0"
+  		res = request :get, "https://finnhub.io/api/v1/stock/profile2?symbol=#{symbol}&token=#{api_token}"
   	end
 
  		def request(verb, uri_str, data = {}, req_type = "")
