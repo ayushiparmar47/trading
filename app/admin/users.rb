@@ -1,10 +1,11 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :email, :password, :password_confirmation, :image, :news_letter
+  permit_params :first_name, :email, :password, :password_confirmation, :image, :news_letter, :short_bio
 
   index do
     selectable_column
     id_column
     column :first_name
+    column :short_bio
     column :email
     column :image do |user|
       image_path = "#{user.image_url}"
@@ -25,6 +26,7 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs do
       f.input :first_name
+      f.input :short_bio
       f.input :email
       f.input :password
       f.input :password_confirmation
@@ -40,6 +42,7 @@ ActiveAdmin.register User do
   show do
     attributes_table do
       row :first_name
+      row :short_bio
       row :email
       row :image do |user|
         image_path = "#{user.image_url}"
