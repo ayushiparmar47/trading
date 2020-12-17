@@ -27,7 +27,7 @@ class User < ApplicationRecord
 	]
 
   has_many :authentication_tokens, dependent: :destroy
-  
+  has_many :user_analyzed_trades
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable
 

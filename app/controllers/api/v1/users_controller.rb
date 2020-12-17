@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-	before_action :authenticate_api_v1_user!, only: [:index,:reset_password,:set_news_letter]
+	before_action :authenticate_api_v1_user!, only: [:index,:reset_password,:set_news_letter,:set_user_analyzed_trades]
 	
   # get "/api/v1/users"
 	def index
@@ -50,4 +50,19 @@ class Api::V1::UsersController < ApplicationController
       render json: {success: false, message: "Sign in first."}
     end
   end
+
+  # post  /api/v1/set_analyzed_trades
+  def set_user_analyzed_trades
+    if current_api_v1_user.present?
+      @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],current_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
+      if @analyzed_trades.save
+        render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
+      else
+        render json: {success: true, message: @analyzed_trades.errors.messages}
+      end
+    else
+      render json: {success: false, message: "Sign in first"}
+    end
+  end
+
 end

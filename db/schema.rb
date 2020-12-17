@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_14_085147) do
+ActiveRecord::Schema.define(version: 2020_12_16_135459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,17 @@ ActiveRecord::Schema.define(version: 2020_12_14_085147) do
     t.index ["company_id"], name: "index_today_trades_on_company_id"
   end
 
+  create_table "user_analyzed_trades", force: :cascade do |t|
+    t.bigint "today_trade_id"
+    t.float "current_rate"
+    t.bigint "user_id"
+    t.float "gain_or_loss"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["today_trade_id"], name: "index_user_analyzed_trades_on_today_trade_id"
+    t.index ["user_id"], name: "index_user_analyzed_trades_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name", default: "", null: false
     t.string "email", default: "", null: false
@@ -130,4 +141,6 @@ ActiveRecord::Schema.define(version: 2020_12_14_085147) do
 
   add_foreign_key "authentication_tokens", "users"
   add_foreign_key "today_trades", "companies"
+  add_foreign_key "user_analyzed_trades", "today_trades"
+  add_foreign_key "user_analyzed_trades", "users"
 end
