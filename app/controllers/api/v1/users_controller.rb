@@ -1,11 +1,16 @@
 class Api::V1::UsersController < ApplicationController
-	before_action :authenticate_api_v1_user!, only: [:index,:reset_password,:set_news_letter,:set_user_analyzed_trades]
-	
+	before_action :authenticate_api_v1_user!
+
   # get "/api/v1/users"
-	def index
-		@users = User.all
-		render json: {success: true, message: @users}
-	end
+  # User for about us page
+	def index 
+		  @users = User.limit(4)
+      if @users.present?
+		    render json: {success: true, message: @users.as_json}, status: 200
+	    else
+        render json: {success: false, message: @users.errors.messages}
+      end
+  end
 
 	# post /api/v1/reset_password
   def reset_password
