@@ -1,0 +1,1 @@
+//= link blanck_user.png

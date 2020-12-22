@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+
 	before_action :authenticate_api_v1_user!
 
   # get "/api/v1/users"
@@ -25,6 +26,14 @@ class Api::V1::UsersController < ApplicationController
       else
         render json: {success: false, message: "New Password does not match - Confirm Password"}
       end
+    else
+      render json: {success: false, message: "Sign in first."}
+    end
+  end
+
+  def user_details
+    if current_api_v1_user.present?
+      render json: {success: true, user: current_api_v1_user.as_json, message: "User details."}
     else
       render json: {success: false, message: "Sign in first."}
     end
