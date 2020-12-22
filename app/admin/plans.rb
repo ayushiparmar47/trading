@@ -30,7 +30,7 @@ ActiveAdmin.register Plan do
     # end
     def destroy
       plan = Plan.find(params[:id])
-      #Stripe::Plan.delete(plan.stripe_plan_id)
+      Stripe::Plan.delete(plan.stripe_plan_id)
       destroy!
     end
   end 

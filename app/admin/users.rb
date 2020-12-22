@@ -18,6 +18,7 @@ ActiveAdmin.register User do
     column :plan do |user|
       user.plans.last
     end
+    column :subscribed
     column :news_letter
     column :current_sign_in_at
     column :created_at
@@ -59,8 +60,11 @@ ActiveAdmin.register User do
       row :first_name
       row :short_bio
       row :email
-      row :plan
+      row :plan do |user|
+        user.plans.last
+      end
       row :news_letter
+      row :subscribed
       row :current_sign_in_at
       row :sign_in_count
       row :created_at
