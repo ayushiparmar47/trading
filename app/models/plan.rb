@@ -1,7 +1,6 @@
 class Plan < ApplicationRecord
-	
-	enum plan_type: { free: 0, premimum: 1 }
-	enum duration_type: { month: 0, year: 1 }
+
+	enum interval: { day: 0, week: 1, month: 2, year: 3 }
 
 	has_many :plan_subscriptions
   has_many :users, through: :plan_subscriptions, dependent: :destroy

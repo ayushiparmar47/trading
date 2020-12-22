@@ -1,15 +1,21 @@
 class Api::V1::UsersController < ApplicationController
 
-	before_action :authenticate_api_v1_user!, only: [:index, :reset_password, :user_details, :set_news_letter]
+	before_action :authenticate_api_v1_user!
 
-	def index
-		@users = User.all
-		render json: {success: true, message: @users}
-	end
+  # get "/api/v1/users"
+  # User for about us page
+	def index 
+		  @users = User.limit(4)
+      if @users.present?
+		    render json: {success: true, message: @users.as_json}, status: 200
+	    else
+        render json: {success: false, message: @users.errors.messages}
+      end
+  end
 
 	# post /api/v1/reset_password
   def reset_password
-    params[:user] = JSON.parse(params["user"])
+    # params[:user] = JSON.parse(params["user"])
     if current_api_v1_user.present? 
       if (params[:user][:new_password]) == (params[:user][:confirm_password])
         if current_api_v1_user.update(password: params[:user][:new_password]) and current_api_v1_user.errors.blank?
@@ -56,6 +62,20 @@ class Api::V1::UsersController < ApplicationController
       end
     else
       render json: {success: false, message: "Sign in first."}
+    end
+  end
+
+  # post  /api/v1/set_analyzed_trades
+  def set_user_analyzed_trades
+    if current_api_v1_user.present?
+      @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],current_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
+      if @analyzed_trades.save
+        render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
+      else
+        render json: {success: true, message: @analyzed_trades.errors.messages}
+      end
+    else
+      render json: {success: false, message: "Sign in first"}
     end
   end
 

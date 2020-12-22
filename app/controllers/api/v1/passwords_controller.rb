@@ -17,14 +17,14 @@ class Api::V1::PasswordsController < Devise::PasswordsController
       UserMailer.sendMail(@user).deliver
       render json: {success: true, message: "Reset link sent to your email" , reset_password_token: @user.reset_password_token}, status: 200
     else
-      render json: {message: "no such email is present"}
+      render json: {success: false, message: "No such email is present"}
     end
   end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   def edit
     # redirect to change password screen with reset password token
-    render json: {message: "This will redirect to edit password screen wit reset password token"}
+    render json: {success: true, message: "This will redirect to edit password screen wit reset password token"}
   end
 
   # PUT /api/v1/users/password?reset_password_token=54f8d52628370705e39e

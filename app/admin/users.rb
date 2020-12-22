@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :first_name, :email, :password, :password_confirmation, :image, :news_letter
+  permit_params :first_name, :email, :password, :password_confirmation, :image, :news_letter, :short_bio
 
   index do
     selectable_column
@@ -13,8 +13,11 @@ ActiveAdmin.register User do
       image_tag image_path 
     end
     column :first_name
+    column :short_bio
     column :email
-    column :plan
+    column :plan do |user|
+      user.plans.last
+    end
     column :news_letter
     column :current_sign_in_at
     column :created_at
@@ -37,6 +40,7 @@ ActiveAdmin.register User do
         ? link_to("#{f.object&.image&.url}", "#{f.object&.image&.url}", target: :_blank)
         : content_tag(:span, "Please upload Image")
       f.input :image_cache, :as => :hidden    
+      f.input :short_bio
       f.input :news_letter, as: :boolean
     end
     f.actions
@@ -53,6 +57,7 @@ ActiveAdmin.register User do
         image_tag image_path  
       end
       row :first_name
+      row :short_bio
       row :email
       row :plan
       row :news_letter

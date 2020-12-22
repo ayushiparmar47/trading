@@ -92,7 +92,7 @@ Rails.application.configure do
     port:                 587,
     domain:               'gmail.com',
     user_name:            'parmarayushi17@gmail.com',
-    password:             'shishi1234',
+    password:             'shishi-4321',
     authentication:       'plain' 
   }
   config.asset_host = 'https://desolate-ravine-19733.herokuapp.com'
