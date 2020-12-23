@@ -25,9 +25,9 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   # GET /api/v1/users/edit
   def edit
     if current_api_v1_user.present?
-      render json: {success: true, user: current_api_v1_user}
+      render_object(current_api_v1_user, 'user', "Edit user details.")
     else
-      render json: {success: false, message: "login first"}
+      render_error("Sign in first")
     end
   end
 
@@ -37,9 +37,9 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       current_api_v1_user.update(email: params[:email], first_name: params[:first_name], image: params[:image], short_bio: params[:short_bio])
       if current_api_v1_user.errors.messages.blank?
         if current_api_v1_user.email != params[:email]
-          render json: {success: true, user: current_api_v1_user, message: "Since you have changed your email, a confirmation mail has been sent to your updated mail id. Please confirm it before proceed."}
+          render_object(current_api_v1_user, 'user', "Since you have changed your email, a confirmation mail has been sent to your updated mail id. Please confirm it before proceed.")
         else
-          render json: {success: true, user: current_api_v1_user, message: "Successfully updated user"}
+          render_object(current_api_v1_user, 'user', "Successfully updated user details.")
         end
       else
         render json: {success: false, user: current_api_v1_user, message: current_api_v1_user.errors.messages}, status: 404

@@ -18,7 +18,7 @@ class Api::V1::SubscriptionsController < ApplicationController
 		  stripe_card_token = token.id
   		@subscription.save_with_payment(user, plan_id, stripe_card_token)
   		if @subscription.save
-	  		@plan_subscription = PlanSubscription.create(user_id: user.id, plan_id: plan_id)
+	  		#@plan_subscription = PlanSubscription.create(user_id: user.id, plan_id: plan_id)
 	    	user.update(subscribed: true)
 		    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !")
 		  else

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 			resources :users, only: [:index, :show] do
         collection do
           get 'user_details'
+          get 'similar_profile'
         end
       end
       resources :payments, only: [:create] do
