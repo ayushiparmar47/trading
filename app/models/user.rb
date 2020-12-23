@@ -27,9 +27,10 @@ class User < ApplicationRecord
 	]
 
   has_many :authentication_tokens, dependent: :destroy
-  has_many :plan_subscriptions
-  has_many :plans, through: :plan_subscriptions, dependent: :destroy
+  # has_many :plan_subscriptions
+  # has_many :plans, through: :plan_subscriptions, dependent: :destroy
   has_many :subscriptions
+  has_many :plans, through: :subscriptions, dependent: :destroy
   has_many :user_analyzed_trades
 
   devise :database_authenticatable, :registerable,
@@ -62,6 +63,11 @@ class User < ApplicationRecord
     self.reset_password_token = nil
     self.password = password
     save!
+  end
+
+  def self.similar_profiles(user)
+    plan = user.plans.last
+    self.joins(:plans).where('plans.name = ? AND users.id != ?', plan.name, user.id)&.limit(6)
   end
 
   private

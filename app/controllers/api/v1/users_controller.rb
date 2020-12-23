@@ -5,17 +5,16 @@ class Api::V1::UsersController < ApplicationController
   # get "/api/v1/users"
   # User for about us page
 	def index 
-		  @users = User.limit(4)
-      if @users.present?
-		    render json: {success: true, message: @users.as_json}, status: 200
-	    else
-        render json: {success: false, message: @users.errors.messages}
-      end
+	  @users = User.limit(4)
+    if @users.present?
+      render_collection(@users, 'user', User, "users list...!")
+    else
+      render_error("Not avalable user...!")
+    end
   end
 
 	# post /api/v1/reset_password
   def reset_password
-    # params[:user] = JSON.parse(params["user"])
     if current_api_v1_user.present? 
       if (params[:user][:new_password]) == (params[:user][:confirm_password])
         if current_api_v1_user.update(password: params[:user][:new_password]) and current_api_v1_user.errors.blank?
@@ -27,7 +26,7 @@ class Api::V1::UsersController < ApplicationController
         render json: {success: false, message: "New Password does not match - Confirm Password"}
       end
     else
-      render json: {success: false, message: "Sign in first."}
+      render_error("Sign in first")
     end
   end
 
@@ -35,7 +34,7 @@ class Api::V1::UsersController < ApplicationController
     if current_api_v1_user.present?
       render json: {success: true, user: current_api_v1_user.as_json, message: "User details."}
     else
-      render json: {success: false, message: "Sign in first."}
+      render_error("Sign in first")
     end
   end
 
@@ -61,7 +60,7 @@ class Api::V1::UsersController < ApplicationController
         render json: {success: false, message: "Please enter email id."}
       end
     else
-      render json: {success: false, message: "Sign in first."}
+      render_error("Sign in first")
     end
   end
 
@@ -75,7 +74,20 @@ class Api::V1::UsersController < ApplicationController
         render json: {success: true, message: @analyzed_trades.errors.messages}
       end
     else
-      render json: {success: false, message: "Sign in first"}
+      render_error("Sign in first")
+    end
+  end
+
+  def similar_profile
+    if current_api_v1_user.present?
+      similar_user = User.similar_profiles(current_api_v1_user)
+      if similar_user.present?
+        render_collection(similar_user, 'similar_user', User, "similar_profiles users...!")
+      else
+        render_error("Currently not avalable similar_profiles users...!")
+      end
+    else
+      render_error("Sign in first")
     end
   end
 

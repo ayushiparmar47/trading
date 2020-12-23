@@ -4,7 +4,11 @@ class Api::V1::PlansController < ApplicationController
 
 	def index
 		@plans = Plan.all
-		render json: {success: true, plan: @plans, massage: "Plan list"}
+		if @plans.present?
+			render_collection(@plans, 'plan', Plan, "Plan list...!")
+		else
+			render_error("Not avalable any plans...!")
+		end
 	end
 
 end
