@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_16_135459) do
+ActiveRecord::Schema.define(version: 2020_12_21_142503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,10 +85,43 @@ ActiveRecord::Schema.define(version: 2020_12_16_135459) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "plan_subscriptions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "plan_id"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_id"], name: "index_plan_subscriptions_on_plan_id"
+    t.index ["user_id"], name: "index_plan_subscriptions_on_user_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "currency"
+    t.integer "interval"
+    t.integer "interval_count"
+    t.string "stripe_plan_id"
+    t.string "stripe_product_id"
+  end
+
   create_table "referal_codes", force: :cascade do |t|
     t.string "referal_code"
     t.float "discount_percent"
     t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "plan_id"
+    t.string "stripe_customer_id"
+    t.string "stripe_subscription_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -134,6 +167,7 @@ ActiveRecord::Schema.define(version: 2020_12_16_135459) do
     t.text "short_bio"
     t.boolean "news_letter"
     t.string "referral_code"
+    t.boolean "subscribed", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

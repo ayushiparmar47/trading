@@ -1,5 +1,7 @@
 defaults: &defaults
   api_key: "bukf81n48v6s9fns33u0"
+  # iexcloud_token: "pk_674dcc9c3c7d47d2b409b0c920059c5c"
+  iexcloud_token: "pk_4c86b33c8888490b8e407bfbe987ded0"
  
 
 development:

@@ -20,7 +20,8 @@ Rails.application.routes.draw do
       post "/reset_password" => "users#reset_password"      
       post "/set_news_letter" => "users#set_news_letter"
       get "/get_todays_trades" => "companies#get_todays_trades" 
-      post "/set_user_analyzed_trades" => "users#set_user_analyzed_trades"		
+      post "/set_user_analyzed_trades" => "users#set_user_analyzed_trades"	
+      get "/get_user_analyzed_trades" => "users#get_user_analyzed_trades"	
 		end
 	end
   devise_for :admin_users, ActiveAdmin::Devise.config

@@ -21,12 +21,37 @@ module FinnhubApi
   		return current_rate
   	end
 
-  	def fetch_company_profile symbol
+    def fetch_company_history_rates symbol
+      token = APP_CONFIG["iexcloud_token"]
+      response = request :get, "https://cloud.iexapis.com/stable/stock/#{symbol}/chart/6m?token=#{token}"
+      historical_prices = fetch_datewise_record response
+    end
+
+    def fetch_datewise_record res
+      historical_prices = {}
+      res.each_with_index do |data,i|
+          historical_prices["#{data["date"]}"] =  data["close"]
+      end
+      return historical_prices
+    end
+
+    def current_rate_for_dates
+     date = []
+      cal_date = Date.today
+      date << Date.today.to_s
+      for i in 0..5
+        cal_date = cal_date - 1.months
+        date << cal_date.to_s
+      end
+      return date
+  	end
+
+    def fetch_company_profile symbol
   		api_token = APP_CONFIG["api_key"]
   		res = request :get, "https://finnhub.io/api/v1/stock/profile2?symbol=#{symbol}&token=#{api_token}"
   	end
 
- 		def request(verb, uri_str, data = {}, req_type = "")
+ 		def request(verb, uri_str,token = "" , req_type = "", data = {})
 	    uri = URI.parse(uri_str)
 	    http = Net::HTTP.new(uri.host, uri.port)
 	    if uri.scheme=="https"
@@ -40,8 +65,8 @@ module FinnhubApi
 				response = http.request(request)
 	    else
 	    	request = VERB_MAP[verb].new(uri.request_uri)
-				request.body = data.to_json
-				response = http.request(request)
+        # request["Content-Type"] = "application/json"
+        response = http.request(request)
 	    end
 	    if ["200", "201"].include? response.code
 	      puts "Success  Response Code = #{response.code}, Message = #{response.body}, On API = #{uri_str}"	
