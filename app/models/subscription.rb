@@ -10,7 +10,6 @@ class Subscription < ApplicationRecord
     price = Stripe::Price.create({unit_amount: plan.amount.to_i, currency: plan.currency, recurring: {interval: plan.interval}, product: plan.stripe_product_id})
     subscription = Stripe::Subscription.create({ customer: customer.id, items: [{price: price.id}]})
     self.stripe_customer_id = customer.id
-    self.user_id = user.id
     self.stripe_subscription_id = subscription.id
 	end
 end

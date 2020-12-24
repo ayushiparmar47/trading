@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       resources :contacts, only: :create
       resources :plans, only: :index 
       resources :companies , only: [:index] 
-      resources :subscriptions, only:[:create]	
+      resources :subscriptions, only:[:create, :destroy]	
       post "/reset_password" => "users#reset_password"      
       post "/set_news_letter" => "users#set_news_letter"
       get "/get_todays_trades" => "companies#get_todays_trades" 
