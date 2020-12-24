@@ -1,0 +1,2 @@
+class ReferalCode < ApplicationRecord
+end
