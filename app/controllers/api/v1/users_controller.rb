@@ -97,14 +97,16 @@ class Api::V1::UsersController < ApplicationController
       @user_analyzed_trades = current_api_v1_user.user_analyzed_trades
       if @user_analyzed_trades.present?
         data_hash={}
+        data_array = []
         @user_analyzed_trades.each_with_index do |d,i|
           symbol = d.today_trade.company.symbol
           company_details = FinnhubApi::fetch_company_profile symbol
           current_rate = FinnhubApi::fetch_company_rate symbol
           data = {logo: company_details["logo"], symbol: d.today_trade.company.symbol, name: d.today_trade.company.name, current_rate: current_rate, day_gain: "0" }
-          data_hash["analyzed_trade_#{i+1}"] = data
+          data_array << data
+          # data_hash["analyzed_trade_#{i+1}"] = data
         end
-        render json: {success: true, message: "Analyzed Trades" , data: data_hash }
+        render json: {success: true, message: "Analyzed Trades" , data: data_array }
       else
         render json: {success: false, message: "Not Analyzed any trade yet.."}
       end
