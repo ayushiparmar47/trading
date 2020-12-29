@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :email, :news_letter, :subscribed, :plan, :referral_code, :short_bio, :image
+  attributes :id, :first_name, :email, :news_letter, :subscribed, :plan, :referral_code, :short_bio, :image, :trading_exp
 
   def plan
   	object.plans.last&.name

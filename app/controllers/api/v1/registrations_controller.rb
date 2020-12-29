@@ -12,7 +12,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   # POST /api/v1/users
   def create
     # params[:user] = JSON.parse(params["user"])
-    user = User.new(email: params[:email], first_name: params[:first_name], image: params[:image], short_bio: params[:short_bio], password: params[:password], referral_code: params[:referral_code])
+    user = User.new(email: params[:email], first_name: params[:first_name], image: params[:image], short_bio: params[:short_bio], password: params[:password], referral_code: params[:referral_code],trading_exp: params[:trading_exp])
     if user.save
       token = Tiddle.create_and_return_token(user, request)
       render json: { success: true, user: user.as_json.merge({token: token}), message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}      
