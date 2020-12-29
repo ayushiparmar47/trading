@@ -8,6 +8,8 @@ Rails.application.routes.draw do
           get 'similar_profile'
         end
       end
+      resources :chats
+      
       resources :payments, only: [:create] do
         collection do
           post :add_payment_method

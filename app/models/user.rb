@@ -38,6 +38,12 @@ class User < ApplicationRecord
   validates :email, presence: true
   #validates :password, length: { in: 6..20 }, presence: true
 
+  
+  has_many :messages,  dependent: :destroy
+  has_many :conversations, foreign_key: :sender_id
+  
+  has_and_belongs_to_many :chats, join_table: "user_chats"
+
 	def domain_check
 		if email.present?
 			domain = email.split("@")[1]
