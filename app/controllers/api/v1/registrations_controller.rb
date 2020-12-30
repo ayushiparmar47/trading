@@ -5,7 +5,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   
   # POST /api/v1/users
   def create
-    user = User.new(email: params[:email], first_name: params[:first_name], image: params[:image], short_bio: params[:short_bio], password: params[:password])
+    user = User.new(email: params[:email], first_name: params[:first_name], image: params[:image], short_bio: params[:short_bio], password: params[:password], trading_exp: params[:trading_exp])
     user.referrer_id = @referrer.id
     if user.save
       token = Tiddle.create_and_return_token(user, request)
