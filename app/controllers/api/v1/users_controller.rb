@@ -111,7 +111,7 @@ class Api::V1::UsersController < ApplicationController
           current_rate = FinnhubApi::fetch_company_rate symbol
           expected_rate = d.today_trade.company.expected_rate
           day_gain_or_loss, gain_or_loss_per, status = calculate_day_gain current_rate, expected_rate, status
-          data = {logo: company_details["logo"], symbol: d.today_trade.company.symbol, name: d.today_trade.company.name, current_rate: current_rate, expected_rate: expected_rate, day_gain_or_loss: day_gain_or_loss, gain_or_loss_per: "#{gain_or_loss_per}%", status: status }
+          data = {logo: company_details["logo"],trade_id: d.today_trade.id, company_id: d.today_trade.company.id , symbol: d.today_trade.company.symbol, name: d.today_trade.company.name, current_rate: current_rate, expected_rate: expected_rate, day_gain_or_loss: day_gain_or_loss, gain_or_loss_per: "#{gain_or_loss_per}%", status: status }
           data_array << data
           # data_hash["analyzed_trade_#{i+1}"] = data
         end
