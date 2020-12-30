@@ -29,7 +29,7 @@ class Api::V1::UsersController < ApplicationController
       render_error("Sign in first")
     end
   end
-  
+
    # get /api/v1/users/user_details
   def user_details
     if current_api_v1_user.present?
@@ -69,12 +69,16 @@ class Api::V1::UsersController < ApplicationController
 
   # post  /api/v1/set_analyzed_trades
   def set_user_analyzed_trades
-    if current_api_v1_user.present?
-      @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],current_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
-      if @analyzed_trades.save
-        render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
+    if current_api_v1_user.present? and current_api_v1_user.subscribed?
+      unless UserAnalyzedTrade.where("user_id =? and today_trade_id = ?",current_api_v1_user.id,params[:trade_analyzed][:today_trade_id]).present?
+        @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],current_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
+        if @analyzed_trades.save
+          render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
+        else
+          render json: {success: true, message: @analyzed_trades.errors.messages}
+        end
       else
-        render json: {success: true, message: @analyzed_trades.errors.messages}
+        render json: {success: false, message: "You already analyzed this trade"}
       end
     else
       render_error("Sign in first")
@@ -105,7 +109,9 @@ class Api::V1::UsersController < ApplicationController
           symbol = d.today_trade.company.symbol
           company_details = FinnhubApi::fetch_company_profile symbol
           current_rate = FinnhubApi::fetch_company_rate symbol
-          data = {logo: company_details["logo"], symbol: d.today_trade.company.symbol, name: d.today_trade.company.name, current_rate: current_rate, day_gain: "0" }
+          expected_rate = d.today_trade.company.expected_rate
+          day_gain_or_loss, gain_or_loss_per, status = calculate_day_gain current_rate, expected_rate, status
+          data = {logo: company_details["logo"], symbol: d.today_trade.company.symbol, name: d.today_trade.company.name, current_rate: current_rate, expected_rate: expected_rate, day_gain_or_loss: day_gain_or_loss, gain_or_loss_per: "#{gain_or_loss_per}%", status: status }
           data_array << data
           # data_hash["analyzed_trade_#{i+1}"] = data
         end
@@ -115,6 +121,18 @@ class Api::V1::UsersController < ApplicationController
       end
     else
       render_error("Sign in first")
+    end
+  end
+
+  def calculate_day_gain current, expected, status = nil
+    if expected < current
+      gain = (current - expected)
+      gain_per = (gain*100/expected)
+      return gain.round(2) , gain_per.round(2), "Gain"
+    else
+      loss = (expected - current).abs
+      loss_per = (loss*100/expected)
+      return loss.round(2) , loss_per.round(2), "Loss"
     end
   end
 
