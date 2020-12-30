@@ -4,7 +4,6 @@ class Api::V1::UsersController < ApplicationController
   before_action :check_existing_user, only: [:invite_user]
   before_action :get_referal_bonus, only: [:invite_user]
 
-
   # get "/api/v1/users"
   # User for about us page
 	def index 
@@ -127,6 +126,18 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def calculate_day_gain current, expected, status = nil
+    if expected < current
+      gain = (current - expected)
+      gain_per = (gain*100/expected)
+      return gain.round(2) , gain_per.round(2), "Gain"
+    else
+      loss = (expected - current).abs
+      loss_per = (loss*100/expected)
+      return loss.round(2) , loss_per.round(2), "Loss"
+    end
+  end
+
   def invite_user
     if current_api_v1_user.present?
       @user = current_api_v1_user
@@ -156,19 +167,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   private
-
-  def calculate_day_gain current, expected, status = nil
-    if expected < current
-      gain = (current - expected)
-      gain_per = (gain*100/expected)
-      return gain.round(2) , gain_per.round(2), "Gain"
-    else
-      loss = (expected - current).abs
-      loss_per = (loss*100/expected)
-      return loss.round(2) , loss_per.round(2), "Loss"
-    end
-  end
-
 
   def check_existing_user
     @existing_user = User.find_by(email: params[:email])
