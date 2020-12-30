@@ -1,0 +1,8 @@
+<p>
+	Hello <%= @email %>,
+</p>
+<p>
+	Mr./Miss <b><%= @user.first_name ? @user.first_name : @user.email %></b> want's to Invite you. <br>
+	please use <b> Referral code : <%= @user.referral_code %></b> and get <b><%= @referal_bonus&.subscriber_discount ? 
+	@referal_bonus&.subscriber_discount : 0 %>%</b> cashback on Subscription plan.
+</p>

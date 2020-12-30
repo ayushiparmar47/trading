@@ -1,6 +1,9 @@
 class Api::V1::UsersController < ApplicationController
 
 	before_action :authenticate_api_v1_user!
+  before_action :check_existing_user, only: [:invite_user]
+  before_action :get_referal_bonus, only: [:invite_user]
+
 
   # get "/api/v1/users"
   # User for about us page
@@ -111,6 +114,44 @@ class Api::V1::UsersController < ApplicationController
     else
       render_error("Sign in first")
     end
+  end
+
+  def invite_user
+    if current_api_v1_user.present?
+      @user = current_api_v1_user
+      email = params[:email]
+      if @existing_user.present?
+        render_error("User alredy exist !")
+      else
+        UserMailer.invite(@user, email, @referal_bonus).deliver
+        render json: {success: true, message: "Invite user link sent to your email" }, status: 200
+      end
+    else
+      render_error("Sign in first")
+    end
+  end
+
+  def wallet
+    if current_api_v1_user.present?
+      if current_api_v1_user.wallet.present?
+        wallet = current_api_v1_user.wallet
+        render_object(wallet, 'wallet', "User wallet..!")
+      else
+        render_error("Currently not create wallet")
+      end
+    else
+      render_error("Sign in first")
+    end
+  end
+
+  private
+
+  def check_existing_user
+    @existing_user = User.find_by(email: params[:email])
+  end
+
+  def get_referal_bonus
+    @referal_bonus = ReferralBonus.find_by(active: true)
   end
 
 end
