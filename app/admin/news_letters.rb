@@ -28,7 +28,7 @@ ActiveAdmin.register NewsLetter do
   form do |f|
     f.inputs do
       f.input :subject
-      f.input :content
+      f.input :content, as: :ckeditor
       f.input :image, :as => :file, :label => "Image", :hint => f.object.image.present? \
         ? link_to("#{f.object&.image&.url}", "#{f.object&.image&.url}", target: :_blank)
         : content_tag(:span, "Please upload Image")
