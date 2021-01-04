@@ -30,6 +30,8 @@ class User < ApplicationRecord
   has_many :subscriptions
   has_many :plans, through: :subscriptions, dependent: :destroy
   has_many :user_analyzed_trades
+  has_many :referrals, class_name: "User", foreign_key: "referrer_id"
+  has_one :wallet
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable
@@ -43,6 +45,15 @@ class User < ApplicationRecord
   has_many :conversations, foreign_key: :sender_id
   
   has_and_belongs_to_many :chats, join_table: "user_chats"
+
+  scope :premimum, -> { joins(:plans).where('plans.name LIKE ?', "premimum") }
+  scope :free, -> { joins(:plans).where('plans.name LIKE ?', "free") }
+  
+  after_create :assign_default_wallet
+
+  before_create do |user|
+    user.referral_code = generate_unique_key('referral_code')
+  end
 
 	def domain_check
 		if email.present?
@@ -74,10 +85,21 @@ class User < ApplicationRecord
     self.joins(:plans).where('plans.name = ? AND users.id != ?', plan.name, user.id)&.limit(6)
   end
 
+  def assign_default_wallet
+    self.create_wallet(totel_amount: 0.0)
+  end
+
   private
 
   def generate_token
     SecureRandom.hex(10)
+  end
+
+  def generate_unique_key(field_name)
+    loop do
+      key = SecureRandom.urlsafe_base64(9).gsub(/-|_/,('a'..'z').to_a[rand(26)])
+      break key unless User.exists?("#{field_name}": key)
+    end
   end
 
 end

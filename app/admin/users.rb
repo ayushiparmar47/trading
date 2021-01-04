@@ -1,6 +1,10 @@
 ActiveAdmin.register User do
   permit_params :first_name, :email, :password, :password_confirmation, :image, :news_letter, :short_bio
 
+  scope :all
+  scope :premimum
+  scope :free
+
   controller do
     def update_resource(object, attributes)
       update_method = attributes.first[:password].present? ? :update_attributes : :update_without_password
@@ -20,10 +24,13 @@ ActiveAdmin.register User do
       image_tag image_path 
     end
     column :first_name
-    column :short_bio
     column :email
     column :plan do |user|
       user.plans.last
+    end
+    column :referral_code
+    column :referral_count do |user|
+      user.referrals&.count
     end
     column :subscribed
     column :news_letter
@@ -69,6 +76,10 @@ ActiveAdmin.register User do
       row :email
       row :plan do |user|
         user.plans.last
+      end
+      row :referral_code
+      row :referral_user do |user|
+        user.referrals.map {|u| u.first_name}
       end
       row :news_letter
       row :subscribed
