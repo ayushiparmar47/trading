@@ -32,6 +32,9 @@ ActiveAdmin.register User do
     column :referral_count do |user|
       user.referrals&.count
     end
+    column :wallet do |user|
+      user.wallet&.totel_amount
+    end
     column :subscribed
     column :news_letter
     column :current_sign_in_at

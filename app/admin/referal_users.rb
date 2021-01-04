@@ -34,6 +34,9 @@ ActiveAdmin.register User, as: 'Referral User' do
     actions
   end
 
+  filter :first_name
+  filter :email
+
   show do
     attributes_table do
       row :image do |user|
