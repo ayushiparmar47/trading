@@ -7,7 +7,8 @@ ActiveAdmin.setup do |config|
   config.site_title = "Tradingg"
 
   # config.register_javascript 'ckeditor/init.js'
-  config.register_javascript 'ckeditor/config.js'
+  # config.register_javascript 'ckeditor/config.js'
+  # config.register_javascript 'ckeditor/init.js'
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #
@@ -217,6 +218,8 @@ ActiveAdmin.setup do |config|
   #
   # To load a javascript file:
   #   config.register_javascript 'my_javascript.js'
+  config.register_stylesheet 'https://cdn.bootcss.com/trix/1.0.0/trix.css'
+  config.register_javascript 'https://cdn.bootcss.com/trix/1.0.0/trix.js'
 
   # == CSV options
   #

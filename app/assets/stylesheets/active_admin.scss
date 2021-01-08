@@ -12,6 +12,8 @@
 @import "active_admin/base";
 @import "active_admin/searchable_select";
 @import "active_admin_datetimepicker";
+@import 'activeadmin/quill_editor/quill.snow';
+@import 'activeadmin/quill_editor_input';
 
 // Overriding any non-variable Sass must be done after the fact.
 // For example, to change the default status-tag color:
@@ -29,4 +31,11 @@ img {
 .cke_chrome {
   width: 79.5% !important;
   overflow: hidden;
+}
+
+.active_admin {
+  form trix-editor {
+    margin-left: 20%;
+    width: calc(80% - 17px);
+  }
 }
