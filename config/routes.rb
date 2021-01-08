@@ -17,6 +17,9 @@ Rails.application.routes.draw do
           post :add_payment_method
         end
       end
+      # Mobile device routes
+      resources :mobile_devices, only: [:create, :destroy]
+      
       resources :contacts, only: :create
       resources :plans, only: :index 
       resources :companies , only: [:index] 
