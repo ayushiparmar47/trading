@@ -32,6 +32,7 @@ class User < ApplicationRecord
   has_many :user_analyzed_trades
   has_many :referrals, class_name: "User", foreign_key: "referrer_id"
   has_one :wallet
+  has_many :mobile_devices, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable
@@ -40,9 +41,6 @@ class User < ApplicationRecord
   validates :email, presence: true
   #validates :password, length: { in: 6..20 }, presence: true
 
-  
-  has_many :messages,  dependent: :destroy
-  has_many :conversations, foreign_key: :sender_id
   
   has_and_belongs_to_many :chats, join_table: "user_chats"
 
