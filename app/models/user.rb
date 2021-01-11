@@ -42,9 +42,6 @@ class User < ApplicationRecord
   #validates :password, length: { in: 6..20 }, presence: true
 
   
-  has_many :messages,  dependent: :destroy
-  has_many :conversations, foreign_key: :sender_id
-  
   has_and_belongs_to_many :chats, join_table: "user_chats"
 
   scope :premimum, -> { joins(:plans).where('plans.name LIKE ?', "premimum") }
