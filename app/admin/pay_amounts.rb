@@ -42,8 +42,11 @@ ActiveAdmin.register PayAmount do
     column :status
     column :payed
     actions defaults: true do |pay_amount|
-      link_to "Pay", pay_admin_pay_amount_path(pay_amount.id), method: :post unless pay_amount.payed?
-      link_to "Delete", delete_admin_pay_amount_path(pay_amount.id), method: :delete, data: {confirm: "Are you sure you want to delete this?"} if pay_amount.payed?
+      if pay_amount.payed?
+        link_to "Delete", delete_admin_pay_amount_path(pay_amount.id), method: :delete, data: {confirm: "Are you sure you want to delete this?"}
+      else
+        link_to "Pay", pay_admin_pay_amount_path(pay_amount.id), method: :post
+      end
     end
   end
 

@@ -22,6 +22,7 @@ class Api::V1::SubscriptionsController < ApplicationController
 	  		@subscription.save_with_payment(user, plan_id, stripe_card_token)
 	  		if @subscription.save
 		    	user.update(subscribed: true)
+		    	#Delayed::Job.enqueue(SubscriptionJob.new(@subscription), 3.days.from_now)
 			    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !")
 			  else
 			    @data.push(success: false, message: @subscription.errors.full_messages)
@@ -37,14 +38,20 @@ class Api::V1::SubscriptionsController < ApplicationController
 	def destroy
 		@data = []
 		user = current_api_v1_user
+		subscription = Subscription.find(params[:id])
+		plan = subscription.plan if subscription.present?
 		if user.present?
-			subscription = Subscription.find(params[:id])
-			if stripe_subscription_destroy(subscription) && subscription.destroy
-				user.update(subscribed: false)
-				@data.push(success: true, massage: "Plan unsubscribed...!")
+			if Time.now < subscription.trial_date
+				if stripe_subscription_destroy(subscription) && subscription.destroy
+					user.update(subscribed: false)
+					PayAmount.create(user_id: user.id, amount: plan.amount, payment_type: "refund", status: 0)
+					@data.push(success: true, massage: "Plan unsubscribed...!")
+				else
+					@data.push(success: false, message: subscription.errors.full_messages.to_sentence)
+				end
 			else
-				@data.push(success: false, message: subscription.errors.full_messages.to_sentence)
-			end
+				@data.push(success: false, message: "You can't unsubscribed this packege. You have been cross limit of free trial...!")
+			end		
 		else
 			@data.push(success: false, message: "Sign in first")
 		end

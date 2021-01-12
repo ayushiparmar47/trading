@@ -1,4 +1,5 @@
-ActiveAdmin.register ReferralBonus do
+ActiveAdmin.register ReferralBonus, as: 'Plan Offers' do
+  menu parent: "Plan"
   permit_params :refer_discount, :subscriber_discount, :start_date, :end_date, :active
 
   index do
