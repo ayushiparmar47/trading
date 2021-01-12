@@ -13,6 +13,9 @@ class Subscription < ApplicationRecord
     subscription = Stripe::Subscription.create({ customer: customer.id, items: [{price: price.id}]})
     self.stripe_customer_id = customer.id
     self.stripe_subscription_id = subscription.id
+    self.start_date = Time.now
+    self.end_date = get_end_date(plan)
+    self.trial_date = get_trial_date(plan)
 	end
 
   def pay_amount
@@ -41,6 +44,14 @@ class Subscription < ApplicationRecord
 
   def referal_bonus
     ReferralBonus.find_by(active: true)
+  end
+
+  def get_end_date(plan)
+    Time.now + plan&.interval_count&.send(plan.interval)
+  end
+
+  def get_trial_date(plan)
+    Time.now + plan&.trial_day&.day
   end
 
 end

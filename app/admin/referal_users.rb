@@ -1,4 +1,5 @@
 ActiveAdmin.register User, as: 'Referral User' do
+  menu parent: "User"
   actions :all, :except => [:new, :edit, :destroy]
 
   controller do

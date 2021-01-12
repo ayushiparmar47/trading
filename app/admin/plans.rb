@@ -1,5 +1,6 @@
 ActiveAdmin.register Plan do
-  permit_params :name, :currency, :interval, :interval_count, :amount, :stripe_plan_id, :stripe_product_id
+  menu parent: "Plan"
+  permit_params :name, :currency, :interval, :interval_count, :amount, :stripe_plan_id, :stripe_product_id, :trial_day
 
   controller do
     def create
@@ -16,18 +17,7 @@ ActiveAdmin.register Plan do
       params[:plan][:stripe_product_id] =  stripe_product.id   
       create! 
     end
-    # def update
-    #   plan = Plan.find(params[:id])
-    #   Stripe::Plan.update(
-    #     plan.stripe_plan_id,
-    #     :amount =>  params[:plan][:amount].to_i,
-    #     :interval =>  params[:plan][:interval],
-    #     :interval_count =>  params[:plan][:interval_count],
-    #     :name =>  params[:plan][:name],
-    #     :currency => params[:plan][:currency],
-    #   )
-    #   update!
-    # end
+    
     def destroy
       plan = Plan.find(params[:id])
       Stripe::Plan.delete(plan.stripe_plan_id)
@@ -44,6 +34,9 @@ ActiveAdmin.register Plan do
       end
       column :amount do |plan|
         "$ #{plan.amount}"
+      end
+      column :trial_day do |plan|
+        "#{plan.trial_day} Day's" if plan.trial_day.present?
       end
       column :currency
       column :stripe_plan_id
@@ -64,6 +57,7 @@ ActiveAdmin.register Plan do
       f.input :interval, :label => "Duration Type", as: :searchable_select
       f.input :currency, input_html: {:style => 'width:28.5%'} 
       f.input :amount, input_html: {:style => 'width:28.5%'}  
+      f.input :trial_day, input_html: {:style => 'width:28.5%'} 
       f.input :stripe_plan_id, :as => :hidden
       f.input :stripe_product_id, :as => :hidden
     end
@@ -78,6 +72,9 @@ ActiveAdmin.register Plan do
       end
       row :amount do |plan|
         "$ #{plan.amount}"
+      end
+      row :trial_day do |plan|
+        "#{plan.trial_day} Day's" if plan.trial_day.present?
       end
       row :currency
       row :stripe_plan_id

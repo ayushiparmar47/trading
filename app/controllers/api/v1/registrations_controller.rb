@@ -6,14 +6,18 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   # POST /api/v1/users
   def create
     user = User.new(email: params[:email], first_name: params[:first_name], image: params[:image], short_bio: params[:short_bio], password: params[:password], trading_exp: params[:trading_exp])
-    user.referrer_id = @referrer.id if @referrer.present?
-    if user.save
-      token = Tiddle.create_and_return_token(user, request)
-      render json: { success: true, user: user.as_json.merge({token: token}), message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}      
+    if @referrer.present? || params[:referrer_key]&.present? == false || params[:referrer_key].nil?
+      user.referrer_id = @referrer.id if @referrer.present?
+      if user.save
+        token = Tiddle.create_and_return_token(user, request)
+        render json: { success: true, user: user.as_json.merge({token: token}), message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}      
+      else
+        msg = user.errors.full_messages
+        render json: {success: false, message: msg}
+      end
     else
-      msg = user.errors.full_messages
-      render json: {success: false, message: msg}
-    end
+      render json: {success: false, message: "Invalid referral code...!"}
+    end  
   end
 
   # GET /api/v1/users/edit
