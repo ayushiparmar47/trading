@@ -4,8 +4,8 @@ class Api::V1::PlansController < ApplicationController
 
 	def index
 		@plans = Plan.all
-		receiver_ids = current_api_v1_user.id
-		if @plans.present?
+		#receiver_ids = current_api_v1_user.id
+		if @plans.present? 
 			render_collection(@plans, 'plan', Plan, "Plan list...!")
 			# PushNotification.trigger_notification(receiver_ids,'plan_list', @plans) 
 		else

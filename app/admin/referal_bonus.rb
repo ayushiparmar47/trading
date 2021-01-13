@@ -1,6 +1,13 @@
 ActiveAdmin.register ReferralBonus, as: 'Plan Offers' do
   menu parent: "Plan"
   permit_params :refer_discount, :subscriber_discount, :start_date, :end_date, :active
+  actions :all, :except => [:destroy]
+
+  member_action :delete, method: :delete do
+    resource.destroy
+    flash[:notice] = ('Plan Offer destroyed')
+    redirect_to admin_plan_offers_path
+  end
 
   index do
     selectable_column
@@ -15,7 +22,11 @@ ActiveAdmin.register ReferralBonus, as: 'Plan Offers' do
     column :end_date
     column :active
     column :created_at
-    actions
+    actions defaults: true do |referral_bonus|
+      unless referral_bonus.active?
+        link_to "Delete", delete_admin_plan_offer_path(referral_bonus.id), method: :delete, data: {confirm: "Are you sure you want to delete this?"}
+      end
+    end
   end
 
   show do
