@@ -6,6 +6,7 @@ class Api::V1::CompaniesController < ApplicationController
 	# get /api/v1/get_todays_trades
 	def get_todays_trades
 		if current_api_v1_user.present?
+			
 			# if current_api_v1_user.plans.present?
 				# if current_api_v1_user.plans.first.name == "free"
 				# 	@trades = TodayTrade.where(for_free_plan: true)
