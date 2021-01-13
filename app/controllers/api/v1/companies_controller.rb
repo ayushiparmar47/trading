@@ -6,16 +6,16 @@ class Api::V1::CompaniesController < ApplicationController
 	# get /api/v1/get_todays_trades
 	def get_todays_trades
 		if current_api_v1_user.present?
-			if current_api_v1_user.plans.present?
-				if current_api_v1_user.plans.first.name == "free"
-					@trades = TodayTrade.where(for_free_plan: true)
-					@free_trades = fetch_trades @trades
-					if @free_trades.present?
-						render json: {success: true, data: @free_trades.as_json}, status: 200
-					else
-						render json: {success: false, message: "No trades suggestion is present"}
-					end
-				else
+			# if current_api_v1_user.plans.present?
+				# if current_api_v1_user.plans.first.name == "free"
+				# 	@trades = TodayTrade.where(for_free_plan: true)
+				# 	@free_trades = fetch_trades @trades
+				# 	if @free_trades.present?
+				# 		render json: {success: true, data: @free_trades.as_json}, status: 200
+				# 	else
+				# 		render json: {success: false, message: "No trades suggestion is present"}
+				# 	end
+				# else
 				# ALL TRADES WILL BE SHOWN FOR PREMIUM
 					@p_trades = TodayTrade.all
 					@paid_trades = fetch_trades @p_trades
@@ -24,10 +24,10 @@ class Api::V1::CompaniesController < ApplicationController
 					else
 						render json: {success: false, message: "No trades suggestion is present"}
 					end
-				end
-			else
-				render json: {success: false, message: "Please Subscribe to our plans"}
-			end
+				# end
+			# else
+			# 	render json: {success: false, message: "Please Subscribe to our plans"}
+			# end
 		else
 			render json: {success: false, message: "Please Sign in first.."}
 		end
@@ -38,7 +38,7 @@ class Api::V1::CompaniesController < ApplicationController
 		symbols = []
 		data_array = []
 		data_hash = {}
-		trades.select { |t| symbols << [t.company.symbol,t.company.expected_rate,t.company.name,t.company.id,t.id]}
+		trades.select { |t| symbols << [t.company.symbol,t.expected_rate,t.company.name,t.company.id,t.id]}
 		symbols.each_with_index do |symbol,i|
 			current_rate = FinnhubApi::fetch_company_rate symbol[0]
 			company_details = FinnhubApi::fetch_company_profile symbol[0]

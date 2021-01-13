@@ -71,17 +71,22 @@ class Api::V1::UsersController < ApplicationController
 
   # post  /api/v1/set_analyzed_trades
   def set_user_analyzed_trades
-    if current_api_v1_user.present? and current_api_v1_user.subscribed?
-      unless UserAnalyzedTrade.where("user_id =? and today_trade_id = ?",current_api_v1_user.id,params[:trade_analyzed][:today_trade_id]).present?
-        @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],current_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
-        if @analyzed_trades.save
-          render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
+    if current_api_v1_user.present?
+      # if current_api_v1_user.subscribed?
+        unless UserAnalyzedTrade.where("user_id =? and today_trade_id = ?",current_api_v1_user.id,params[:trade_analyzed][:today_trade_id]).present?
+          @today_trade = TodayTrade.find params[:trade_analyzed][:today_trade_id]
+          @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],company_rate: params[:trade_analyzed][:current_rate],company_expected_rate: @today_trade.expected_rate,user_id: current_api_v1_user.id)
+          if @analyzed_trades.save
+            render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
+          else
+            render json: {success: true, message: @analyzed_trades.errors.messages}
+          end
         else
-          render json: {success: true, message: @analyzed_trades.errors.messages}
+          render json: {success: false, message: "You already analyzed this trade"}
         end
-      else
-        render json: {success: false, message: "You already analyzed this trade"}
-      end
+      # else
+        # render json: {success: false, message: "YPlease subscribe to our plans first."}
+      # end
     else
       render_error("Sign in first")
     end
@@ -110,8 +115,10 @@ class Api::V1::UsersController < ApplicationController
         @user_analyzed_trades.each_with_index do |d,i|
           symbol = d.today_trade.company.symbol
           company_details = FinnhubApi::fetch_company_profile symbol
-          current_rate = FinnhubApi::fetch_company_rate symbol
-          expected_rate = d.today_trade.company.expected_rate
+          # current_rate = FinnhubApi::fetch_company_rate symbol
+          # expected_rate = d.today_trade.expected_rate
+          current_rate = d.company_rate
+          expected_rate = d.company_expected_rate
           day_gain_or_loss, gain_or_loss_per, status = calculate_day_gain current_rate, expected_rate, status
           data = {logo: company_details["logo"],trade_id: d.today_trade.id, company_id: d.today_trade.company.id , symbol: d.today_trade.company.symbol, name: d.today_trade.company.name, current_rate: current_rate, expected_rate: expected_rate, day_gain_or_loss: day_gain_or_loss, gain_or_loss_per: "#{gain_or_loss_per}%", status: status }
           data_array << data
