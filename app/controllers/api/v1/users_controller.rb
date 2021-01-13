@@ -94,11 +94,15 @@ class Api::V1::UsersController < ApplicationController
 
   def similar_profile
     if current_api_v1_user.present?
-      similar_user = User.similar_profiles(current_api_v1_user)
-      if similar_user.present?
-        render_collection(similar_user, 'similar_user', User, "similar_profiles users...!")
+      if current_api_v1_user.subscribed?
+        similar_user = User.similar_profiles(current_api_v1_user)
+        if similar_user.present?
+          render_collection(similar_user, 'similar_user', User, "similar_profiles users...!")
+        else
+          render_error("Currently not avalable similar_profiles users...!")
+        end
       else
-        render_error("Currently not avalable similar_profiles users...!")
+        render json: {success: false, message: "Please subscribe to our plans first."}
       end
     else
       render_error("Sign in first")
