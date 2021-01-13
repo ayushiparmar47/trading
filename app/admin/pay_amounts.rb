@@ -37,7 +37,9 @@ ActiveAdmin.register PayAmount do
     column :email do |pay_amount|
     	pay_amount.user.email
     end
-    column :amount
+    column :amount do |pay_amount|
+      pay_amount.amount.round(2)
+    end
     column :payment_type
     column :status
     column :payed
