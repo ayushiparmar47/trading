@@ -34,7 +34,7 @@ ActiveAdmin.register User do
       user.referrals&.count
     end
     column :wallet do |user|
-      "$#{user.wallet&.totel_amount}"
+      "$#{user.wallet&.totel_amount.round(2) rescue nil}"
     end
     column :subscribed
     column :news_letter
