@@ -108,6 +108,24 @@ class Api::V1::UsersController < ApplicationController
       render_error("Sign in first")
     end
   end
+
+  # GET /api/v1/get_user_info
+  def get_user_info
+    if current_api_v1_user.present?
+      if params[:user_id].present?
+        @user = User.find params[:user_id] rescue nil
+        if @user.present?
+          render json: {success: true,message: "User found", data: @user.as_json}
+        else
+          render json: {success: false, message: "User is not present",}
+        end
+      else
+        render json: {success: false, message: "User Id is not present"}
+      end
+    else
+      render_error("Sign in first")
+    end    
+  end
   
   # GET /api/v1/get_user_analyzed_trades
   def get_user_analyzed_trades
