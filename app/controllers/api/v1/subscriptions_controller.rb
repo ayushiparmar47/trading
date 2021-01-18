@@ -22,7 +22,6 @@ class Api::V1::SubscriptionsController < ApplicationController
 	  		@subscription.save_with_payment(user, plan_id, stripe_card_token)
 	  		if @subscription.save
 		    	user.update(subscribed: true)
-		    	#Delayed::Job.enqueue(SubscriptionJob.new(@subscription), 3.days.from_now)
 			    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !")
 			  else
 			    @data.push(success: false, message: @subscription.errors.full_messages)

@@ -52,7 +52,8 @@ ActiveAdmin.register Plan do
 
   form do |f|
     f.inputs do
-      f.input :name, as: :searchable_select, :collection => ["free", "premimum"]
+      #f.input :name, as: :searchable_select, :collection => ["free", "premimum"]
+      f.input :name, input_html: {:style => 'width:28.5%'} 
       f.input :interval_count, :label => "Duration", input_html: {:style => 'width:28.5%'} 
       f.input :interval, :label => "Duration Type", as: :searchable_select
       f.input :currency, input_html: {:style => 'width:28.5%'} 

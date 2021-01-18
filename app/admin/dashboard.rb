@@ -43,7 +43,7 @@ ActiveAdmin.register_page "Dashboard" do
         panel "Recent Users" do
           table_for User.order("created_at desc").limit(5) do
             column("Image") do |user|
-              if user.image_url.present?
+              if user.image.present?
                 image_path = "#{user.image_url}"
               else
                 image_path = ActionController::Base.helpers.image_url("blanck_user.png")
@@ -59,7 +59,7 @@ ActiveAdmin.register_page "Dashboard" do
         panel "Recent Subscriber" do
           table_for Subscription.order("created_at desc").limit(5).each do |subscription|
             column("Image") do |subscription|
-              if subscription&.user&.image_url.present?
+              if subscription&.user&.image.present?
                 image_path = "#{subscription&.user&.image_url}"
               else
                 image_path = ActionController::Base.helpers.image_url("blanck_user.png")
@@ -74,5 +74,23 @@ ActiveAdmin.register_page "Dashboard" do
         end
       end
     end # columns
+    columns do
+      column do
+        panel "Recent Companies" do
+          table_for Company.order("created_at desc").limit(5).each do |company|
+            column("Name") { |company| link_to(company.name, admin_company_path(company)) }
+            column("symbol") { |company| company.symbol}
+          end
+        end
+      end
+      column do
+        panel "Today Trade" do
+          table_for TodayTrade.order("created_at desc").limit(5).each do |today_trade|
+            column("Company") { |today_trade| link_to(today_trade&.company&.name, admin_company_path(today_trade&.company)) }
+            column("Expected Rate") { |today_trade| today_trade&.expected_rate}
+          end
+        end
+      end
+    end #columns
   end
 end

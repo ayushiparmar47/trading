@@ -38,15 +38,14 @@ ActiveAdmin.register User do
     end
     column :subscribed
     column :news_letter
-    column :current_sign_in_at
     column :created_at
     actions
   end
 
   filter :first_name
   filter :email
-  filter :news_letter
-  filter :current_sign_in_at
+  filter :referral_code
+  filter :plans, as: :searchable_select
   filter :created_at
 
   form do |f|
@@ -87,8 +86,6 @@ ActiveAdmin.register User do
       end
       row :news_letter
       row :subscribed
-      row :current_sign_in_at
-      row :sign_in_count
       row :created_at
     end
   end
