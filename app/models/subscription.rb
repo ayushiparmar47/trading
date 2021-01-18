@@ -5,6 +5,7 @@ class Subscription < ApplicationRecord
   attr_accessor :stripe_card_token
 
   after_create :pay_amount
+  after_create :info_mail
 
 	def save_with_payment(user, plan_id, stripe_card_token)
   	plan = Plan.find(plan_id)
@@ -35,7 +36,7 @@ class Subscription < ApplicationRecord
   end
 
   def get_amount(amount, discount)
-    amount*(discount.to_f/100)
+    amount*(discount.to_f/100)&.round(2)
   end
 
   def check_amount(referrer_id, user)
@@ -52,6 +53,11 @@ class Subscription < ApplicationRecord
 
   def get_trial_date(plan)
     Time.now + plan&.trial_day&.day
+  end
+
+  def info_mail
+    Delayed::Job.enqueue(SubscriptionJob.new(self), 0, self&.end_date&.getutc - 3.day)
+    Delayed::Job.enqueue(SubscriptionExpireJob.new(self), 0, self&.end_date&.getutc)
   end
 
 end

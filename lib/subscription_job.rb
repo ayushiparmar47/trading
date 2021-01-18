@@ -1,6 +1,5 @@
 class SubscriptionJob < Struct.new(:subscription)
   def perform
-    # mailing = Mailing.find(mailing_id)
-    # mailing.deliver
+  	SubscriptionMailer.info(subscription).deliver
   end
 end

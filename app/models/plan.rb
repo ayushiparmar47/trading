@@ -7,5 +7,10 @@ class Plan < ApplicationRecord
 
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, presence: true
+  validates :trial_day, presence: true
+
+  def fee
+  	"#{self.amount} / #{self.interval_count} #{self.interval}"
+  end
 
 end
