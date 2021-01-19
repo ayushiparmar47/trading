@@ -1,0 +1,18 @@
+<p>
+	Dear <%= @user.first_name ? @user.first_name : @user.email %>,
+</p>
+<p>
+	A friendly reminder that your membership plan <b><%= @plan.name %></b> will be expire on <%= @subscription.end_date %>.<br>
+	To renew or update your membership with your Email and Password.
+</p>
+<p>
+	Membership Details: <br>
+	<b>Plan :</b> <%= @plan.name %><br>
+	<b>Start Date :</b> <%= @subscription&.start_date %><br>
+	<b>End Date :</b> <%= @subscription&.end_date %><br>
+	<b>Fee :</b> <%= @plan&.amount %>
+</p>
+<p>
+	Thanks,<br>
+	Tradding App
+</p>

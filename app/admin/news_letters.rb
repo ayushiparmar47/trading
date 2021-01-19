@@ -31,7 +31,7 @@ ActiveAdmin.register NewsLetter do
   end
   form do |f|
     f.inputs do
-      f.input :subject
+      f.input :subject, as: :string
       f.input :content
       f.input :image, :as => :file, :label => "Image", :hint => f.object.image.present? \
         ? link_to("#{f.object&.image&.url}", "#{f.object&.image&.url}", target: :_blank)
