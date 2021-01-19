@@ -1,5 +1,6 @@
 class NewsLetter < ApplicationRecord
 	mount_uploader :image, ImageUploader
+	mount_uploader :file, FileUploader
 
 	after_save :send_news_letter
 
