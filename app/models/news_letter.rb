@@ -1,5 +1,6 @@
 class NewsLetter < ApplicationRecord
 	mount_uploader :image, ImageUploader
+	mount_uploader :file, FileUploader
 
 	after_save :send_news_letter
 
@@ -8,7 +9,6 @@ class NewsLetter < ApplicationRecord
 		if check_field_changed?
 			@users = User.where(news_letter: true)
 			@users.each do |user|
-				#NewsLetterMailer.to_subscriber(mail,self).deliver
 				Delayed::Job.enqueue(NewsLetterJob.new(self, user))
 			end
 		end
@@ -20,6 +20,5 @@ class NewsLetter < ApplicationRecord
     end
     false
   end
-
-
+  
 end
