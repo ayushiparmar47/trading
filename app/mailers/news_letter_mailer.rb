@@ -1,8 +1,9 @@
 class NewsLetterMailer < ApplicationMailer
 
-	def to_subscriber mail, letter
+	def to_subscriber(letter, user)
 		@letter = letter
-		mail to: mail, subject: @letter.subject
+		@user = user
+		mail to: @user.email, subject: @letter.subject
 	end
 
 end

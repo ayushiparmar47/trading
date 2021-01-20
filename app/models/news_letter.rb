@@ -6,9 +6,10 @@ class NewsLetter < ApplicationRecord
 	def send_news_letter
 		puts "-------send_news_letter--------"
 		if check_field_changed?
-			@users_email = User.where(news_letter: true).map(&:email)
-			@users_email.each do |mail|
-				NewsLetterMailer.to_subscriber(mail,self).deliver
+			@users = User.where(news_letter: true)
+			@users.each do |user|
+				#NewsLetterMailer.to_subscriber(mail,self).deliver
+				Delayed::Job.enqueue(NewsLetterJob.new(self, user))
 			end
 		end
 	end

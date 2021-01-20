@@ -1,6 +1,5 @@
 ActiveAdmin.register Subscription do
-    menu parent: "Plan"
-	actions :all, :except => [:new, :edit, :destroy, :show]
+  menu parent: "Plan"
 
 	index do
     selectable_column
