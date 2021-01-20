@@ -5,7 +5,7 @@ ActiveAdmin.register NewsLetter do
   index do
     id_column
     column :subject
-    column :content
+    #column :content
     column :image do |ad|
       image_path = "#{ad.image_url}"
       link_to(image_path, image_path, target: :_blank) 
@@ -22,7 +22,7 @@ ActiveAdmin.register NewsLetter do
   form do |f|
     f.inputs do
       f.input :subject, as: :string
-      f.input :content
+      f.input :content, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
       f.input :image, :as => :file, :label => "Image", :hint => f.object.image.present? \
         ? link_to("#{f.object&.image&.url}", "#{f.object&.image&.url}", target: :_blank)
         : content_tag(:span, "Please upload Image")
@@ -38,7 +38,9 @@ ActiveAdmin.register NewsLetter do
   show do
     attributes_table do
       row :subject
-      row :content
+      row :content do |ns|
+        ns.content.html_safe
+      end
       row :image do |ad|
         image_path = "#{ad.image_url}"
         link_to(image_path, image_path, target: :_blank) 
