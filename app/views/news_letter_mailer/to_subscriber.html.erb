@@ -1,20 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-    <p>
-      Dear User,
-    </p>
-    <p>
-       <%= @letter.content %>
-    </p>
-      <%# if @letter.image.present?%>
-        <%#= image_tag @letter.image_url %>
-      <%#end%>
-    <p>
-      Thanks for connecting with us.
-    </p>
-  </body>
-</html>
+<p>
+  Dear <%= @user.first_name ? @user.first_name : @user.email %>,
+</p>
+<p>
+   <%= @letter.content %>
+</p>
+  <%# if @letter.image.present?%>
+    <%#= image_tag @letter.image.url %>
+  <%#end%>
+<p>
+  Thanks for connecting with us.
+</p>
+

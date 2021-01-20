@@ -1,5 +1,5 @@
 ActiveAdmin.register PayAmount do
-	actions :all, :except => [:new, :edit, :destroy, :show]
+	actions :all, :except => [:new, :edit, :show]
 
 	member_action :pay, method: :post do
 		unless resource.payed?
@@ -12,12 +12,6 @@ ActiveAdmin.register PayAmount do
 			flash[:error] = ('Amount already paid to user')
 		end 
 	  redirect_to admin_pay_amounts_path
-  end
-
-  member_action :delete, method: :delete do
-    resource.destroy
-    flash[:notice] = ('Pay amount destroy successesfull.')
-    redirect_to admin_pay_amounts_path
   end
 
 	index do
@@ -44,9 +38,7 @@ ActiveAdmin.register PayAmount do
     column :status
     column :payed
     actions defaults: true do |pay_amount|
-      if pay_amount.payed?
-        link_to "Delete", delete_admin_pay_amount_path(pay_amount.id), method: :delete, data: {confirm: "Are you sure you want to delete this?"}
-      else
+     unless pay_amount.payed?
         link_to "Pay", pay_admin_pay_amount_path(pay_amount.id), method: :post
       end
     end
