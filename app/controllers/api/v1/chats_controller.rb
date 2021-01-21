@@ -1,10 +1,8 @@
 class Api::V1::ChatsController < ApplicationController
-	before_action :authenticate_user!
-  before_action :check_user_availablity 
+	before_action :authenticate_api_v1_user!
   before_action :find_chat, only: [:read_messages]
   before_action :validate_current_user_chat, only: [:read_messages]
   before_action :check_current_user, only:[:create]
-  before_action :check_pagination_params, only: [:chat_list,:chat_list_unread, :history]
  
   def create
   	current_user = User.first
@@ -22,27 +20,23 @@ class Api::V1::ChatsController < ApplicationController
   
   def chat_list
     chats = current_user&.chats.includes(:messages).order('messages.created_at DESC')&.uniq
-    chats = chats&.paginate(page: params[:page], per_page: params[:per_page])
-      render json: {
-       message: 'success',
-       data: {
-         "chats".to_sym => ActiveModel::Serializer::CollectionSerializer.new(chats, serializer: Api::V1::ChatSerializer, user_id: current_user.id)
-     }}, status: :ok
+    render_collection(chats, 'chat', Chat, "chats list...!")
   end
  
-   def chat_list_unread
-    chats = current_user&.chats.includes(:messages).where.not(messages:{user_id:current_user.id,is_mark_read:true}).order('messages.created_at DESC')&.uniq
-    chats = chats.paginate(page: params[:page], per_page: params[:per_page])
-    render json: {message: 'success',
-       data: {"chats".to_sym => ActiveModel::Serializer::CollectionSerializer.new(chats, serializer: Api::V1::ChatSerializer, unread: 0, user_id: current_user.id)
-     }}, status: :ok
+   def unread_chat_list
+    chats = current_user&.chats.includes(:messages).where.not(messages:{user_id:current_user.id, is_mark_read:true}).order('messages.created_at DESC')&.uniq
+    unread = chats.present? ? chats.count : 0
+    render_collection(chats, 'chat', Chat, "unread chat list...!", unread: unread )
    end
  
   def history
     begin
       chat = current_user&.chats&.where(id: User.find(params['receiver_id'])&.chats&.pluck(:id))&.first
       chat_history =  chat&.messages&.order('created_at DESC')
-      history = chat_history&.paginate(page: params[:page], per_page: params[:per_page])
+
+      # history = chat_history&.paginate(page: params[:page], per_page: params[:per_page])
+      # render_collection(chat_history, 'chat_history', Chat, "chat_history...!")
+
       render json: {message: 'success',
          data: {
            "messages".to_sym => ActiveModel::Serializer::CollectionSerializer.new(history, serializer: Api::V1::MessageSerializer)

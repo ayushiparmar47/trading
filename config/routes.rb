@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
+
+  # Route Actioncable
+  mount ActionCable.server => '/cable'
+
 	namespace :api, defaults: {format: 'json'} do
 		namespace :v1 do
 			devise_for :users  		
@@ -12,6 +16,9 @@ Rails.application.routes.draw do
         end
       end
       resources :chats
+      get 'chat_list', to: 'chats#chat_list'
+      get 'unread_chat_list', to: 'chats#unread_chat_list'
+      
       
       resources :payments, only: [:create] do
         collection do
