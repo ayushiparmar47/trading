@@ -52,22 +52,23 @@ end
 
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'sass-rails'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'activeadmin'
 gem 'devise'
-#gem 'mysql2'
 gem 'tiddle'
 gem 'pg'
 gem 'carrierwave'
+gem 'mini_magick'
 gem 'stripe-rails'
 gem 'stripe'
 gem 'activeadmin-searchable_select'
 gem 'net-ssh'
 gem 'activeadmin-searchable_select'
-gem 'ckeditor', github: 'galetahub/ckeditor'
 gem 'active_model_serializers'
 gem 'active_admin_datetimepicker'
-# gem 'activerecord-mysql-adapter'
 gem 'whenever'
 gem 'delayed_job_active_record'
 gem 'cancancan'
+#gem 'ckeditor', github: 'galetahub/ckeditor'
+gem 'ckeditor', '~> 4.3.0' 

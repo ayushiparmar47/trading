@@ -28,7 +28,9 @@ ActiveAdmin.register Contact do
       row :email
       row :phone
       row :message
-      row :reply_message if contact.replyed?
+      row :reply_message do |contact|
+        contact.reply_message&.html_safe if contact.reply_message.present?
+      end
       row :created_at
     end
   end

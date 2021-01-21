@@ -2,6 +2,8 @@ class NewsLetter < ApplicationRecord
 	mount_uploader :image, ImageUploader
 	mount_uploader :file, FileUploader
 
+	validates :subject, presence: true
+
 	after_save :send_news_letter
 
 	def send_news_letter

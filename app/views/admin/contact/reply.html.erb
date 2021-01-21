@@ -3,19 +3,19 @@
   <table>
     <tr>
       <td><label>Name</label></td>
-      <td><%= f.text_field :name, value: @contact.name, :readonly => true %></td>
+      <td><%= f.text_field :name, value: @contact&.name, :readonly => true %></td>
     </tr>
     <tr>
       <td><label>Email</label></td>
-      <td><%= f.text_field :email, value: @contact.email, :readonly => true %></td>
+      <td><%= f.text_field :email, value: @contact&.email, :readonly => true %></td>
     </tr>
     <tr>
       <td><label>Phone</label></td>
-      <td><%= f.text_field :phone, value: @contact.phone, :readonly => true %></td>
+      <td><%= f.text_field :phone, value: @contact&.phone, :readonly => true %></td>
     </tr>
     <tr>
       <td><label>Message</label></td>
-      <td><%= f.text_area :reply_message, :rows => 10 %></td>
+      <td><%= f.cktext_area :reply_message, :rows => 10 %></td>
     </tr>
     <tr>
       <td>

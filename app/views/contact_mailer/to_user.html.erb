@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-    <p>
-      Dear <%= @contact.name %>,
-    </p>
-    <p>
-      Massage As : <%= @contact.reply_message %>
-    </p>
-    <p>
-      Thanks for contact us.
-    </p>
-  </body>
-</html>
+<p>
+  Dear <%= @contact&.name ? @contact&.name : @contact&.email %>,
+</p>
+<p>
+  Massage As : <%= @contact&.reply_message&.html_safe %>
+</p>
+<p>
+  Thanks for contact us.
+</p>
+  
