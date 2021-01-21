@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Ckeditor::Engine => '/ckeditor'
 	namespace :api, defaults: {format: 'json'} do
 		namespace :v1 do
 			devise_for :users  		
