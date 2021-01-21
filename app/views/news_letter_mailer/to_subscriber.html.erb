@@ -2,7 +2,7 @@
   Dear <%= @user.first_name ? @user.first_name : @user.email %>,
 </p>
 <p>
-   <%= @letter.content %>
+   <%= @letter.content&.html_safe %>
 </p>
   <%# if @letter.image.present?%>
     <%#= image_tag @letter.image.url %>
