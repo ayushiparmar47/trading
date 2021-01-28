@@ -8,5 +8,6 @@ class AdminAbility
     cannot %i[destroy], PayAmount.where(payed: false)
     cannot %i[destroy], ReferralBonus.where(active: true)
     cannot %i[update create destroy], Subscription
+    cannot %i[update create], HistoryTrade
   end
 end
