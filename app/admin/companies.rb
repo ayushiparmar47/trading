@@ -1,23 +1,35 @@
 ActiveAdmin.register Company do
-  #actions :all, :except => [:new]
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
+
+  menu parent: "Trade"
   permit_params :symbol, :name
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:symbol, :name]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
-  # batch_action :flag do |ids|
-  #   batch_action_collection.find(ids).each do |post|
-  #   end
-  #   # redirect_to api_v1_companies_path, alert: "The posts have been flagged."
-  # end 
+  
+  index do
+    selectable_column
+    id_column
+    column :symbol
+    column :name
+    column :created_at
+    actions
+  end
+
+  filter :symbol
+  filter :name
+  filter :created_at
+
+  form do |f|
+    f.inputs do
+      f.input :symbol
+      f.input :name
+    end
+    f.actions
+  end
+
+  show do
+    attributes_table do
+      row :symbol
+      row :name
+      row :created_at
+    end
+  end
   
 end

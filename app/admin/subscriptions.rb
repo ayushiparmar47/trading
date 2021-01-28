@@ -13,4 +13,11 @@ ActiveAdmin.register Subscription do
     column :trial_date
   end
 
+  filter :plan, as: :searchable_select
+  filter :start_date
+  filter :end_date
+  filter :trial_date
+  filter :created_at
+
+
 end
