@@ -19,7 +19,6 @@ Rails.application.routes.draw do
       get 'chat_list', to: 'chats#chat_list'
       get 'unread_chat_list', to: 'chats#unread_chat_list'
       
-      
       resources :payments, only: [:create] do
         collection do
           post :add_payment_method
@@ -31,7 +30,8 @@ Rails.application.routes.draw do
       resources :contacts, only: :create
       resources :plans, only: :index 
       resources :companies , only: [:index] 
-      resources :subscriptions, only:[:create, :destroy]	
+      resources :subscriptions, only:[:create, :destroy]
+      resources :history_trades , only: [:index] 	
       post "/reset_password" => "users#reset_password"      
       post "/set_news_letter" => "users#set_news_letter"
       get "/get_todays_trades" => "companies#get_todays_trades" 

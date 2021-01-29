@@ -1,16 +1,11 @@
 ActiveAdmin.register PayAmount do
-	actions :all, :except => [:new, :edit, :show]
 
 	member_action :pay, method: :post do
-		unless resource.payed?
-			user = resource.user
-			totel_amount = user&.wallet&.totel_amount + resource.amount
-			user&.wallet.update_attributes(totel_amount: totel_amount)
-			resource.update(status: 1, payed: true)
-			flash[:notice] = ('Pay amount to user successesfull.')
-		else
-			flash[:error] = ('Amount already paid to user')
-		end 
+		user = resource.user
+		totel_amount = user&.wallet&.totel_amount + resource.amount
+		user&.wallet.update_attributes(totel_amount: totel_amount)
+		resource.update(status: 1, payed: true)
+		flash[:notice] = ('Pay amount to user successesfull.') 
 	  redirect_to admin_pay_amounts_path
   end
 
@@ -37,9 +32,45 @@ ActiveAdmin.register PayAmount do
     column :payment_type
     column :status
     column :payed
+    column "Payed At", :created_at do |pay_amount|
+        pay_amount.created_at
+      end
     actions defaults: true do |pay_amount|
-     unless pay_amount.payed?
+      unless pay_amount.payed?
         link_to "Pay", pay_admin_pay_amount_path(pay_amount.id), method: :post
+      end
+    end
+  end
+
+  filter :amount
+  filter :payment_type
+  filter :status
+  filter :created_at, label: "Payed At"
+
+  show do
+    attributes_table do
+      row "Image" do |pay_amount|
+        if pay_amount.user.image.present?
+          image_path = "#{pay_amount.user.image_url}"
+        else
+          image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+        end
+        image_tag image_path 
+      end
+      row :first_name do |pay_amount|
+        pay_amount.user.first_name
+      end
+      row :email do |pay_amount|
+        pay_amount.user.email
+      end
+      row :amount do |pay_amount|
+        pay_amount.amount.round(2)
+      end
+      row :payment_type
+      row :status
+      row :payed
+      row "payed at", :created_at do |pay_amount|
+        pay_amount.created_at
       end
     end
   end
