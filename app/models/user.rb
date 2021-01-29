@@ -33,6 +33,7 @@ class User < ApplicationRecord
   has_many :referrals, class_name: "User", foreign_key: "referrer_id"
   has_one :wallet, dependent: :destroy
   has_many :mobile_devices, dependent: :destroy
+  has_many :pay_amounts, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable

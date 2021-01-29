@@ -1,0 +1,11 @@
+<p>
+	Dear <%= @referrer.first_name ? @referrer.first_name : "User" %>,
+</p>
+<p>
+	Congratulations, Mr./Miss <%= @referrer.first_name ? @referrer.first_name : @referrer.email %>. <br>
+	Mr./Miss <b><%= @user.first_name ? @user.first_name : @user.email %></b> has accept your invitation by referal code to <b><%= @user&.created_at&.strftime("%a, %e %b %Y AT %I:%M %p") %></b>.
+</p>
+<p>
+	Thanks,<br>
+	Tradding App
+</p>

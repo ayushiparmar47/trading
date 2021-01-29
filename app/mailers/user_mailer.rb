@@ -11,4 +11,10 @@ class UserMailer < ApplicationMailer
   	mail to: @email, subject: "Invite user !"
   end
 
+  def accept(referrer, user)
+    @user = user
+    @referrer = referrer
+    mail to: @referrer.email, subject: "Invitation accept !"
+  end
+
 end

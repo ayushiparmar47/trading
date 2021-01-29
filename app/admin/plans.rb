@@ -79,6 +79,7 @@ ActiveAdmin.register Plan do
       end
       row :currency
       row :stripe_plan_id
+      row :created_at
     end
   end
   
