@@ -1,6 +1,6 @@
 ActiveAdmin.register Plan do
   menu parent: "Plan"
-  permit_params :name, :currency, :interval, :interval_count, :amount, :stripe_plan_id, :stripe_product_id, :trial_day
+  permit_params :name, :currency, :interval, :interval_count, :amount, :stripe_plan_id, :stripe_product_id, :trial_day, :country
 
   controller do
     def create
@@ -24,6 +24,13 @@ ActiveAdmin.register Plan do
       destroy!
     end
   end 
+
+  member_action :get_currency_code, method: :get do
+    country_code = params[:id]
+    currency = ISO3166::Country[country_code]
+    @currency_code = currency&.currency_code 
+    render json: @currency_code, status: 200
+  end
   
   index do
      selectable_column
@@ -52,11 +59,11 @@ ActiveAdmin.register Plan do
 
   form do |f|
     f.inputs do
-      #f.input :name, as: :searchable_select, :collection => ["free", "premimum"]
       f.input :name, input_html: {:style => 'width:28.5%'} 
       f.input :interval_count, :label => "Duration", input_html: {:style => 'width:28.5%'} 
       f.input :interval, :label => "Duration Type", as: :searchable_select
-      f.input :currency, input_html: {:style => 'width:28.5%'} 
+      f.input :country, input_html: {:style => 'height: 30px; width: 30%;'} 
+      f.input :currency, input_html: {:style => 'width:28.5%', :readonly => true} 
       f.input :amount, input_html: {:style => 'width:28.5%'}  
       f.input :trial_day, input_html: {:style => 'width:28.5%'} 
       f.input :stripe_plan_id, :as => :hidden
