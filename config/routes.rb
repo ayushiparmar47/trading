@@ -24,6 +24,13 @@ Rails.application.routes.draw do
           post :add_payment_method
         end
       end
+
+      resources :user_analyzed_trades do
+        collection do
+          get 'find_user_analyzed_trades'
+        end
+      end
+
       # Mobile device routes
       resources :mobile_devices, only: [:create, :destroy]
       
