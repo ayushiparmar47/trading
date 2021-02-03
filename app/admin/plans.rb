@@ -4,7 +4,6 @@ ActiveAdmin.register Plan do
 
   controller do
     def create
-      debugger
       stripe_product = Stripe::Product.create({name: params[:plan][:name], type: 'service'})
       stripe_plan = Stripe::Plan.create({
         amount: params[:plan][:amount].to_i,

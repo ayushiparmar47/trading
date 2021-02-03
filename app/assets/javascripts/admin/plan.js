@@ -1,7 +1,9 @@
 $(document).ready(function(){
 	if($("#plan_currency").val() == ""){
-		var row = "<option value=\"" + "" + "\">" + "Select Country" + "</option>";
-		$(row).appendTo("#plan_country").prop('selected', true);
+		// var row = "<option value=\"" + "" + "\">" + "Select Country" + "</option>";
+		// $(row).appendTo("#plan_country").prop('selected', true);
+		$('select option[value="US"]').attr("selected",true);
+		$("#plan_currency").val("USD");
 	}
 	$(document).on('change', '#plan_country', function(evt){
 	  var country_code = $("#plan_country").val();
