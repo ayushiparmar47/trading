@@ -75,3 +75,4 @@ gem 'ckeditor', '~> 4.3.0'
 gem 'city-state'
 gem 'countries'
 gem 'country_select', '~> 4.0'
+gem "money", "~> 6.9"

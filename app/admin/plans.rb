@@ -40,7 +40,7 @@ ActiveAdmin.register Plan do
         "#{plan.interval_count} #{plan.interval}"
       end
       column :amount do |plan|
-        "$ #{plan.amount}"
+        "#{plan.symbol} #{plan.amount}"
       end
       column :trial_day do |plan|
         "#{plan.trial_day} Day's" if plan.trial_day.present?
@@ -79,7 +79,7 @@ ActiveAdmin.register Plan do
         "#{plan.interval_count} #{plan.interval}"
       end
       row :amount do |plan|
-        "$ #{plan.amount}"
+        "#{plan.symbol} #{plan.amount}"
       end
       row :trial_day do |plan|
         "#{plan.trial_day} Day's" if plan.trial_day.present?

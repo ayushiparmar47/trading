@@ -13,4 +13,8 @@ class Plan < ApplicationRecord
   	"#{self.amount} / #{self.interval_count} #{self.interval}"
   end
 
+  def symbol
+  	Money::Currency.find(self.currency)&.symbol
+  end
+
 end
