@@ -69,11 +69,11 @@ module FinnhubApi
         response = http.request(request)
 	    end
 	    if ["200", "201"].include? response.code
-	      FinnhubLogs::Logger.info "Success  Response Code = #{response.code}, Message = #{response.body}, On API = #{uri_str}"	
+	      # FinnhubLogs::Logger.info "Success  Response Code = #{response.code}, Message = #{response.body}, On API = #{uri_str}"	
 	      JSON.parse(response.body) unless response.body == nil
 	    else
 	      response_body = JSON.parse(response.body) unless response.body == nil
-        FinnhubLogs::Logger.error "Failed: Response Code = #{response.code}, Message = #{response_body}, On API = #{uri_str}"
+        # FinnhubLogs::Logger.error "Failed: Response Code = #{response.code}, Message = #{response_body}, On API = #{uri_str}"
 	    	response_body
 	    end
 		end
