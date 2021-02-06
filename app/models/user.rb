@@ -29,7 +29,7 @@ class User < ApplicationRecord
   has_many :authentication_tokens, dependent: :destroy
   has_many :subscriptions
   has_many :plans, through: :subscriptions, dependent: :destroy
-  has_many :user_analyzed_trades
+  has_many :user_analyzed_trades, dependent: :destroy
   has_many :referrals, class_name: "User", foreign_key: "referrer_id"
   has_one :wallet, dependent: :destroy
   has_many :mobile_devices, dependent: :destroy
