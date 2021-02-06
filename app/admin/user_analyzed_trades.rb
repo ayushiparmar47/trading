@@ -6,7 +6,7 @@ ActiveAdmin.register UserAnalyzedTrade do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :today_trade_id, :company_rate, :user_id, :gain_or_loss, :company_expected_rate
+  permit_params :analyzed_rate, :user_id, :gain_or_loss, :analyzed_expected_rate
   #
   # or
   #
@@ -15,5 +15,18 @@ ActiveAdmin.register UserAnalyzedTrade do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
+   index do
+    selectable_column
+    id_column
+    column :company_id do |tt|
+      tt.company.name
+    end
+    column :user_id do |tt|
+      tt.user.email
+    end
+    column :analyzed_rate
+    column :created_at
+    actions
+  end
   
 end
