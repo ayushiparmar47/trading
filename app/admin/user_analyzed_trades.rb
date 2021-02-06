@@ -6,7 +6,7 @@ ActiveAdmin.register UserAnalyzedTrade do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :analyzed_rate, :user_id, :gain_or_loss, :analyzed_expected_rate
+  permit_params :analyzed_rate, :user_id, :gain_or_loss, :analyzed_expected_rat
   #
   # or
   #
@@ -27,6 +27,19 @@ ActiveAdmin.register UserAnalyzedTrade do
     column :analyzed_rate
     column :created_at
     actions
+  end
+
+  show do
+    attributes_table do
+      row :company_id do |tt|
+        tt.company.name
+      end
+      row :user_id do |tt|
+        tt.user.email
+      end
+      row :analyzed_rate
+      row :created_at
+    end
   end
   
 end
