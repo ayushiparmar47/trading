@@ -1,39 +1,6 @@
 class Api::V1::SubscriptionsController < ApplicationController
 	before_action :authenticate_api_v1_user!
 
-	# def create
-	# 	@data = []
-	# 	user = current_api_v1_user
-	# 	@subscription = user.subscriptions.new(subscription_params)
-	# 	if user.subscribed?
- #      @data.push(success: false, message: 'Unable to create subscription, user already subscribed')
- #    else
-	# 		token = Stripe::Token.create({
-	# 	  card: {
-	# 	    number: params['card_number'],
-	# 	    exp_month: params['exp_month'],
-	# 	    exp_year: params['exp_year'],
-	# 	    cvc: params['cvc'],
-	# 	    },
-	# 	  })
-	# 	  if token.present?
-	# 		  plan_id = params[:subscription][:plan_id]
-	# 		  stripe_card_token = token.id
-	#   		@subscription.save_with_payment(user, plan_id, stripe_card_token)
-	#   		if @subscription.save
-	# 	    	user.update(subscribed: true)
-	# 		    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !")
-	# 		  else
-	# 		    @data.push(success: false, message: @subscription.errors.full_messages)
-	# 		  end
-	# 		end
- #  	end
-	# 	rescue StandardError => e
- #    @data.push(success: false, message: e.message)
- #    ensure
- #    render json: @data.first
-	# end
-
 	def create
 		@data = []
 		user = current_api_v1_user
@@ -41,13 +8,27 @@ class Api::V1::SubscriptionsController < ApplicationController
 		if user.subscribed?
       @data.push(success: false, message: 'Unable to create subscription, user already subscribed')
     else
-    	if @subscription.save
-	    	user.update(subscribed: true)
-		    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !")
-		  else
-		    @data.push(success: false, message: @subscription.errors.full_messages)
-		  end
-    end
+		  token = params[:subscription][:stripeToken]
+		  if token.present?
+		  	stripe = StripeBaseClass.new(params, user)
+		  	charge = stripe.charge
+		  	if charge.paid? && charge.status == "succeeded"
+		  		payment = user.payments.create(amount: params[:subscription][:amount], stripe_charge_id: charge.id, payment_source: params[:subscription][:type], status: "succeeded")
+		  		stripe_subscription = stripe.create_subscription
+		  		@subscription.stripe_charge_id = charge.id
+		  		if @subscription.save
+			    	user.update(subscribed: true)
+				    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !")
+				  else
+				    @data.push(success: false, message: @subscription.errors.full_messages)
+				  end
+				else
+					@data.push(success: false, message: "Unable to pay amount")
+				end  
+			end
+  	end
+		rescue StandardError => e
+    @data.push(success: false, message: e.message)
     ensure
     render json: @data.first
 	end
