@@ -2,23 +2,17 @@ class Subscription < ApplicationRecord
 	belongs_to :plan
 	belongs_to :user
   
-  #attr_accessor :stripe_card_token
-
   before_save :subscription_details
+  before_create :subscription_info
   after_create :pay_amount
   after_create :info_mail
 
-	# def save_with_payment(user, plan_id, stripe_card_token)
- #  	plan = Plan.find(plan_id)
- #    customer = Stripe::Customer.create(email: user.email, name: user&.first_name, plan: plan.stripe_plan_id, card: stripe_card_token)	    
- #    price = Stripe::Price.create({unit_amount: plan.amount.to_i, currency: plan.currency, recurring: {interval: plan.interval}, product: plan.stripe_product_id})
- #    subscription = Stripe::Subscription.create({ customer: customer.id, items: [{price: price.id}]})
- #    self.stripe_customer_id = customer.id
- #    self.stripe_subscription_id = subscription.id
- #    self.start_date = Time.now
- #    self.end_date = get_end_date(plan)
- #    self.trial_date = get_trial_date(plan)
-	# end
+  def subscription_info
+    self.stripe_customer_id = self.user&.stripe_customer_id
+    self.start_date = Time.now
+    self.end_date = get_end_date(self.plan)
+    self.trial_date = get_trial_date(self.plan)
+  end
 
   def subscription_details
     self.start_date = Time.now

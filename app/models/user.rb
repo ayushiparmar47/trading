@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_one :wallet, dependent: :destroy
   has_many :mobile_devices, dependent: :destroy
   has_many :pay_amounts, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable
@@ -88,6 +89,18 @@ class User < ApplicationRecord
     self.create_wallet(totel_amount: 0.0)
   end
 
+  def subscription_data
+    customer
+  end
+
+  def customer
+    if stripe_customer_id.present?
+      Stripe::Customer.retrieve(stripe_customer_id)
+    else
+      create_customer
+    end
+  end
+
   private
 
   def generate_token
@@ -99,6 +112,24 @@ class User < ApplicationRecord
       key = SecureRandom.urlsafe_base64(9).gsub(/-|_/,('a'..'z').to_a[rand(26)])
       break key unless User.exists?("#{field_name}": key)
     end
+  end
+
+  def create_customer
+    customer = Stripe::Customer.create(
+      name: 'test',
+      email: email,
+      description: "Customer for #{email}",
+      address: {
+        line1: '510 Townsend St',
+        postal_code: '98140',
+        city: 'San Francisco',
+        state: 'CA',
+        country: 'US'
+      }
+    )
+    self.stripe_customer_id = customer.id
+    save
+    customer
   end
 
 end
