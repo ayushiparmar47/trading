@@ -11,7 +11,8 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       if user.save
         token = Tiddle.create_and_return_token(user, request)
         UserMailer.accept(@referrer, user).deliver if @referrer.present?
-        render json: { success: true, user: user.as_json.merge({token: token}), message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."}      
+        #render json: { success: true, user: user.as_json.merge({token: token}), message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."} 
+        render_object(user, 'user', "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account.", token: token)     
       else
         msg = user.errors.full_messages
         render json: {success: false, message: msg}
