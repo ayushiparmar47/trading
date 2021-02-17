@@ -37,7 +37,8 @@ class Api::V1::UsersController < ApplicationController
     if current_api_v1_user.present?
       date_joined = current_api_v1_user.created_at.to_date
       tickets_analyzed = current_api_v1_user.user_analyzed_trades.count
-      render json: {success: true, user: current_api_v1_user.as_json.merge({date_joined: date_joined,tickets_analyzed: tickets_analyzed}), message: "User details."}
+      #render json: {success: true, user: current_api_v1_user.as_json.merge({date_joined: date_joined,tickets_analyzed: tickets_analyzed}), message: "User details."}
+    render_object(current_api_v1_user, 'user', "User details.", date_joined: date_joined,tickets_analyzed: tickets_analyzed)     
     else
       render_error("Sign in first")
     end
