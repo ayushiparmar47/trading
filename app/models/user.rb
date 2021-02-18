@@ -116,7 +116,7 @@ class User < ApplicationRecord
 
   def create_customer
     customer = Stripe::Customer.create(
-      name: 'test',
+      name: first_name,
       email: email,
       description: "Customer for #{email}",
       address: {
