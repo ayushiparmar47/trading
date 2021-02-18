@@ -25,7 +25,7 @@ class StripeBaseClass < BaseService
   def charge
     plan = Plan.find(@plan_id)
     Stripe::Charge.create({
-      amount: @amount,
+      amount: (@amount * 100),
       #currency: "inr",
       currency: plan.currency,
       source: @stripe_token,
@@ -50,6 +50,10 @@ class StripeBaseClass < BaseService
         product: plan.stripe_product_id
       }
     )
+  end
+
+  def refund
+    
   end
 
 end
