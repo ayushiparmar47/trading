@@ -76,7 +76,8 @@ class Api::V1::UsersController < ApplicationController
       # if current_api_v1_user.subscribed?
         # unless UserAnalyzedTrade.where("user_id =? and today_trade_id = ?",current_api_v1_user.id,params[:trade_analyzed][:today_trade_id]).present?
           @today_trade = TodayTrade.find params[:trade_analyzed][:today_trade_id]
-          @analyzed_trades = UserAnalyzedTrade.new(company_id: params[:trade_analyzed][:company_id],analyzed_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
+          @analyzed_trades = UserAnalyzedTrade.new(company_id: @today_trade&.company_id,analyzed_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
+          #@analyzed_trades = UserAnalyzedTrade.new(company_id: params[:trade_analyzed][:company_id],analyzed_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
           # @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],company_rate: params[:trade_analyzed][:current_rate],company_expected_rate: @today_trade.expected_rate,user_id: current_api_v1_user.id)
           if @analyzed_trades.save
             render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
