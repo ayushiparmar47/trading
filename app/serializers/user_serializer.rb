@@ -10,7 +10,7 @@ class UserSerializer < ActiveModel::Serializer
   	if object.image.present?
       object.image_url
     else
-      ActionController::Base.helpers.image_url("blanck_user.png")
+      ActionController::Base.helpers.image_url("user.jpeg")
     end  
   end
 

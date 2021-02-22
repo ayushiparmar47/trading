@@ -5,7 +5,6 @@ ActiveAdmin.register NewsLetter do
   index do
     id_column
     column :subject
-    #column :content
     column :image do |ad|
       image_path = "#{ad.image_url}"
       link_to(image_path, image_path, target: :_blank) 

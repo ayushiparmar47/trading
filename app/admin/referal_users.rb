@@ -22,7 +22,7 @@ ActiveAdmin.register User, as: 'Referral User' do
       if user.image.present?
         image_path = "#{user.image_url}"
       else
-        image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+        image_path = ActionController::Base.helpers.image_url("user.jpeg")
       end
       image_tag image_path 
     end
@@ -44,7 +44,7 @@ ActiveAdmin.register User, as: 'Referral User' do
         if user.image.present?
           image_path = "#{user.image_url}"
         else
-          image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+          image_path = ActionController::Base.helpers.image_url("user.jpeg")
         end
         image_tag image_path  
       end

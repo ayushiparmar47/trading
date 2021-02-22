@@ -16,7 +16,7 @@ ActiveAdmin.register PayAmount do
       if pay_amount.user.image.present?
         image_path = "#{pay_amount.user.image_url}"
       else
-        image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+        image_path = ActionController::Base.helpers.image_url("user.jpeg")
       end
       image_tag image_path 
     end
@@ -53,7 +53,7 @@ ActiveAdmin.register PayAmount do
         if pay_amount.user.image.present?
           image_path = "#{pay_amount.user.image_url}"
         else
-          image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+          image_path = ActionController::Base.helpers.image_url("user.jpeg")
         end
         image_tag image_path 
       end

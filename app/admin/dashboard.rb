@@ -46,7 +46,7 @@ ActiveAdmin.register_page "Dashboard" do
               if user.image.present?
                 image_path = "#{user.image_url}"
               else
-                image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+                image_path = ActionController::Base.helpers.image_url("user.jpeg")
               end
                image_tag image_path
             end
@@ -62,7 +62,7 @@ ActiveAdmin.register_page "Dashboard" do
               if subscription&.user&.image.present?
                 image_path = "#{subscription&.user&.image_url}"
               else
-                image_path = ActionController::Base.helpers.image_url("blanck_user.png")
+                image_path = ActionController::Base.helpers.image_url("user.jpeg")
               end
                image_tag image_path
             end
