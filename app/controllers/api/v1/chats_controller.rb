@@ -2,10 +2,9 @@ class Api::V1::ChatsController < ApplicationController
 	before_action :authenticate_api_v1_user!
   before_action :find_chat, only: [:read_messages]
   before_action :validate_current_user_chat, only: [:read_messages]
-  before_action :check_current_user, only:[:create]
+  # before_action :check_current_user, only:[:create]
  
   def create
-  	current_user = User.first
     chat = current_user.chats.where(id: User.find(params['receiver_id']).chats.pluck(:id)).first
     if chat
       chat  
@@ -76,3 +75,8 @@ class Api::V1::ChatsController < ApplicationController
   end
   
 end
+
+
+
+
+
