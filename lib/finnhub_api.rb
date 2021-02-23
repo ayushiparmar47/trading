@@ -10,19 +10,19 @@ module FinnhubApi
 
   class << self
   	def get_companies_symbols
-  		api_token = APP_CONFIG["api_key"]
+  		api_token = ApiToken.first.finnhub_api_token
   		res = request :get, "https://finnhub.io/api/v1/stock/symbol?exchange=US&token=#{api_token}"
   	end
 
   	def fetch_company_rate symbol
-      api_token = APP_CONFIG["api_key"]
+      api_token = ApiToken.first.finnhub_api_token
   		res = request :get, "https://finnhub.io/api/v1/quote?symbol=#{symbol}&token=#{api_token}"
   		current_rate = res["c"]
   		return current_rate
   	end
 
     def fetch_company_history_rates symbol
-      token = APP_CONFIG["iexcloud_token"]
+      token = ApiToken.first.iexcloud_api_token
       response = request :get, "https://cloud.iexapis.com/stable/stock/#{symbol}/chart/6m?token=#{token}"
       historical_prices = fetch_datewise_record response
     end
@@ -47,7 +47,7 @@ module FinnhubApi
   	end
 
     def fetch_company_profile symbol
-  		api_token = APP_CONFIG["api_key"]
+  		api_token = ApiToken.first.finnhub_api_token
   		res = request :get, "https://finnhub.io/api/v1/stock/profile2?symbol=#{symbol}&token=#{api_token}"
   	end
 
@@ -77,6 +77,5 @@ module FinnhubApi
 	    	response_body
 	    end
 		end
-
   end
 end
