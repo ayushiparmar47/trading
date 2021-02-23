@@ -23,11 +23,11 @@ class Api::V1::ChatsController < ApplicationController
     render_collection(chats, 'chat', Chat, "chats list...!")
   end
  
-   def unread_chat_list
+  def unread_chat_list
     chats = current_user&.chats.includes(:messages).where.not(messages:{user_id:current_user.id, is_mark_read:true}).order('messages.created_at DESC')&.uniq
     unread = chats.present? ? chats.count : 0
     render_collection(chats, 'chat', Chat, "unread chat list...!", unread: unread )
-   end
+  end
  
   def history
     begin
