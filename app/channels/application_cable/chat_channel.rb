@@ -13,7 +13,7 @@ module ApplicationCable
  
         data[:message_id] = message.id
  
-        ActionCable.server.broadcast(data['channel_name'].to_s, message_id: message.id,body: data['message'], sender_name: current_user.full_name, sender_id: current_user.id, sender_image:current_user.image, message_type:message.message_type,read_status:message.is_mark_read,  date: message.message_date, attachment: message&.attachment&.url)
+        ActionCable.server.broadcast(data['channel_name'].to_s, message_id: message.id,body: data['message'], sender_name: current_user.first_name, sender_id: current_user.id, sender_image:current_user.image, message_type:message.message_type,read_status:message.is_mark_read,  date: message.message_date, attachment: message&.attachment&.url)
         MessageBroadcastJob.perform_later message.id 
       end
  
@@ -35,3 +35,4 @@ end
 
 
 
+ 

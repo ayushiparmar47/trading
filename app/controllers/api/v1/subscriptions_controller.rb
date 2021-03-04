@@ -18,7 +18,7 @@ class Api::V1::SubscriptionsController < ApplicationController
 		  		@subscription.stripe_charge_id = charge.id
 		  		if @subscription.save
 			    	user.update(subscribed: true)
-				    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !")
+				    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !", subscription_state: true)
 				  else
 				    @data.push(success: false, message: @subscription.errors.full_messages)
 				  end
@@ -43,7 +43,7 @@ class Api::V1::SubscriptionsController < ApplicationController
 				if subscription.destroy
 					user.update(subscribed: false)
 					PayAmount.create(user_id: user.id, amount: plan.amount, payment_type: "refund", status: 0)
-					@data.push(success: true, massage: "Plan unsubscribed...!")
+					@data.push(success: true, massage: "Plan unsubscribed...!",subscription_state: false)
 				else
 					@data.push(success: false, message: subscription.errors.full_messages.to_sentence)
 				end
