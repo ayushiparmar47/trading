@@ -33,14 +33,14 @@ class Api::V1::SubscriptionsController < ApplicationController
     render json: @data.first
 	end
 
-	def destroy
+	def unsubscribed
 		@data = []
 		user = current_api_v1_user
 		subscription = Subscription.find(params[:id])
 		plan = subscription.plan if subscription.present?
 		if user.present?
 			if Time.now < subscription.trial_date
-				if stripe_subscription_destroy(subscription) && subscription.destroy
+				if subscription.destroy
 					user.update(subscribed: false)
 					PayAmount.create(user_id: user.id, amount: plan.amount, payment_type: "refund", status: 0)
 					@data.push(success: true, massage: "Plan unsubscribed...!")
@@ -60,10 +60,6 @@ class Api::V1::SubscriptionsController < ApplicationController
 	end
 
 	protected
-
-	def stripe_subscription_destroy(subscription)
-		Stripe::Subscription.delete(subscription.stripe_subscription_id)
-	end
 
   def subscription_params
     params.require(:subscription).permit(:user_id, :plan_id, :stripe_customer_id, :stripe_subscription_id, :stripe_payment_id) 

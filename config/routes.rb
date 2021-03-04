@@ -37,7 +37,11 @@ Rails.application.routes.draw do
       resources :contacts, only: :create
       resources :plans, only: :index 
       resources :companies , only: [:index] 
-      resources :subscriptions, only:[:create, :destroy]
+      resources :subscriptions, only:[:create, :destroy] do
+        member do 
+          post "unsubscribed"
+        end
+      end
       resources :history_trades , only: [:index] 	
       post "/reset_password" => "users#reset_password"      
       post "/set_news_letter" => "users#set_news_letter"
