@@ -73,11 +73,10 @@ class Api::V1::UsersController < ApplicationController
   # post  /api/v1/set_analyzed_trades
   def set_user_analyzed_trades
     if current_api_v1_user.present?
-      # if current_api_v1_user.subscribed?
+      if current_api_v1_user.subscribed?
         # unless UserAnalyzedTrade.where("user_id =? and today_trade_id = ?",current_api_v1_user.id,params[:trade_analyzed][:today_trade_id]).present?
           @today_trade = TodayTrade.find params[:trade_analyzed][:today_trade_id]
           @analyzed_trades = UserAnalyzedTrade.new(company_id: @today_trade&.company_id,analyzed_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
-          #@analyzed_trades = UserAnalyzedTrade.new(company_id: params[:trade_analyzed][:company_id],analyzed_rate: params[:trade_analyzed][:current_rate],user_id: current_api_v1_user.id)
           # @analyzed_trades = UserAnalyzedTrade.new(today_trade_id: params[:trade_analyzed][:today_trade_id],company_rate: params[:trade_analyzed][:current_rate],company_expected_rate: @today_trade.expected_rate,user_id: current_api_v1_user.id)
           if @analyzed_trades.save
             render json: {success: true, message: "Analyzed Trades Successfully"}, status: 200
@@ -87,14 +86,15 @@ class Api::V1::UsersController < ApplicationController
         # else
           # render json: {success: false, message: "You already analyzed this trade"}
         # end
-      # else
-        # render json: {success: false, message: "YPlease subscribe to our plans first."}
-      # end
+      else
+        render json: {success: false, message: "Please subscribe to our plans first."}
+      end
     else
       render_error("Sign in first")
     end
   end
 
+  # GET /api/v1/users/similar_profile
   def similar_profile
     if current_api_v1_user.present?
       if current_api_v1_user.subscribed?
@@ -102,7 +102,7 @@ class Api::V1::UsersController < ApplicationController
         if similar_user.present?
           render_collection(similar_user, 'similar_user', User, "similar_profiles users...!")
         else
-          render_error("Currently not avalable similar_profiles users...!")
+          render_error("Currently no similar profiles are available..!")
         end
       else
         render json: {success: false, message: "Please subscribe to our plans first."}
@@ -140,7 +140,6 @@ class Api::V1::UsersController < ApplicationController
         @user_analyzed_trades.each_with_index do |d,i|
           symbol = d.company.symbol
           company_details = FinnhubApi::fetch_company_profile symbol
-          # current_rate = FinnhubApi::fetch_company_rate symbol
           # expected_rate = d.today_trade.expected_rate
           current_rate = d.analyzed_rate
 
@@ -188,6 +187,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  # GET /api/v1/users/wallet
   def wallet
     if current_api_v1_user.present?
       if current_api_v1_user.wallet.present?
