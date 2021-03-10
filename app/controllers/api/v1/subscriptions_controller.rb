@@ -5,8 +5,16 @@ class Api::V1::SubscriptionsController < ApplicationController
 		@data = []
 		user = current_api_v1_user
 		@subscription = user.subscriptions.new(subscription_params)
+		@plan = Plan.find(params[:subscription][:plan_id])
 		if user.subscribed?
       @data.push(success: false, message: 'Unable to create subscription, user already subscribed')
+    elsif @plan.amount == 0.0
+    	if @subscription.save
+	    	user.update(subscribed: true)
+		    @data.push(success: true, subscription: @subscription, massage: "Plan subscription done !", subscription_state: true)
+		  else
+		    @data.push(success: false, message: @subscription.errors.full_messages)
+		  end
     else
 		  token = params[:subscription][:stripeToken]
 		  if token.present?
