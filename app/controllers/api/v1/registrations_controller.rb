@@ -11,6 +11,28 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       if user.save
         token = Tiddle.create_and_return_token(user, request)
         UserMailer.accept(@referrer, user).deliver if @referrer.present?
+        plan_id = params[:plan_id]
+        @subscription = user.subscriptions.new(plan_id: plan_id)
+        if plan_id.present?
+          @plan = Plan.find_by(id: plan_id)
+          if @plan.amount == 0.0
+            @subscription.save
+          else
+            token = params[:stripeToken]
+            if token.present?
+              stripe = StripeBaseClass.new(token, user, "card", @plan.id)
+              charge = stripe.charge
+              if charge.paid? && charge.status == "succeeded"
+                payment = user.payments.create(amount: @plan.amount, stripe_charge_id: charge.id, payment_source: "card", status: charge.status)
+                stripe_subscription = stripe.create_subscription
+                @subscription.stripe_charge_id = charge.id
+                if @subscription.save
+                  user.update(subscribed: true)
+                end
+              end
+            end   
+          end
+        end
         #render json: { success: true, user: user.as_json.merge({token: token}), message: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."} 
         render_object(user, 'user', "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account.", token: token)     
       else

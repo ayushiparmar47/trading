@@ -18,7 +18,8 @@ class Api::V1::SubscriptionsController < ApplicationController
     else
 		  token = params[:subscription][:stripeToken]
 		  if token.present?
-		  	stripe = StripeBaseClass.new(params, user)
+		  	type = params[:subscription][:type]
+		  	stripe = StripeBaseClass.new(token, user, type, @plan.id)
 		  	charge = stripe.charge
 		  	if charge.paid? && charge.status == "succeeded"
 		  		payment = user.payments.create(amount: params[:subscription][:amount], stripe_charge_id: charge.id, payment_source: params[:subscription][:type], status: "succeeded")
@@ -31,7 +32,7 @@ class Api::V1::SubscriptionsController < ApplicationController
 				    @data.push(success: false, message: @subscription.errors.full_messages)
 				  end
 				else
-					@data.push(success: false, message: "Unable to pay amount")
+					@data.push(success: false, message: "Pay amount #{charge.status}")
 				end  
 			end
   	end
