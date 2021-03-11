@@ -1,13 +1,11 @@
 
 class StripeBaseClass < BaseService  
   
-  def initialize(params, user)
-    @stripe_token = params[:subscription][:stripeToken]
-    @params = params
-    @amount = params[:subscription][:amount].to_i
+  def initialize(stripe_token, user, type, plan_id)
+    @stripe_token = stripe_token
     @user = user
-    @type = params[:subscription][:type]
-    @plan_id = params[:subscription][:plan_id]
+    @type = type
+    @plan_id = plan_id
    end
 
   def payment_intent
@@ -25,8 +23,7 @@ class StripeBaseClass < BaseService
   def charge
     plan = Plan.find(@plan_id)
     Stripe::Charge.create({
-      amount: (@amount * 100),
-      #currency: "inr",
+      amount: (plan.amount&.to_i * 100),
       currency: plan.currency,
       source: @stripe_token,
       description: "#{@user.email} Charge",
