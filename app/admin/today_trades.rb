@@ -1,20 +1,6 @@
 ActiveAdmin.register TodayTrade do
 	menu parent: "Trade"
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
-  permit_params :company_id, :for_free_plan
-  # permit_params :company_id, :for_free_plan, :expected_rate
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:company_id]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
+  permit_params :company_id, plans: []
 
  index do
     selectable_column
@@ -22,7 +8,7 @@ ActiveAdmin.register TodayTrade do
     column :company_id do |tt|
       tt.company.name
     end
-    column :for_free_plan
+    column :plans
     column :created_at
     actions
   end
@@ -30,8 +16,7 @@ ActiveAdmin.register TodayTrade do
   form do |f|
     f.inputs do
       f.input :company_id, as: :searchable_select, input_html: {:style => 'width:28.5%'}, :collection => Company.all
-      # f.input :expected_rate, input_html: {:style => 'width:28.5%'}
-      f.input :for_free_plan, as: :boolean
+      f.input :plans, as: :select, :collection => Plan.all.pluck(:name), multiple: true,input_html: {:style => 'width:20%'}
     end
     f.actions
   end
@@ -40,7 +25,7 @@ ActiveAdmin.register TodayTrade do
       row :company_id do |tt|
         tt.company.name
       end
-      row :for_free_plan
+      row :plans
     end
   end
 end
