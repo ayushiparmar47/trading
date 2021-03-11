@@ -2,33 +2,16 @@ require 'finnhub_api'
 class Api::V1::CompaniesController < ApplicationController
 	before_action :authenticate_api_v1_user!
 
-
 	# get /api/v1/get_todays_trades
 	def get_todays_trades
-		if current_api_v1_user.present?
-			if current_api_v1_user.plans.present?
-				if current_api_v1_user.plans.first.name == "free"
-					@trades = TodayTrade.where(for_free_plan: true)
-					@free_trades = fetch_trades @trades
-					if @free_trades.present?
-						render json: {success: true, data: @free_trades.as_json}, status: 200
-					else
-						render json: {success: false, message: "No trades suggestion is present"}
-					end
-				else
-					@p_trades = TodayTrade.all
-					@paid_trades = fetch_trades @p_trades
-					if @paid_trades.present?
-						render json: {success: true, data: @paid_trades.as_json}, status: 200
-					else
-						render json: {success: false, message: "No trades suggestion is present"}
-					end
-			else
-				render json: {success: false, message: "Please Subscribe to our plans"}
-			end
+		if current_api_v1_user.plans.present?
+			user_plans = current_api_v1_user.plans.pluck(:name)
+			@trades = TodayTrade.all.select{|tt| tt.plans.include? user_plans.first}
+			@today_trades = fetch_trades @trades
+			render json: {success: true, message: "Today's Trade", data: @today_trades.as_json}, status: 200
 		else
-			render json: {success: false, message: "Please Sign in first.."}
-		end
+			render json: {success: false, message: "Please Subscribe to our plans"}
+		end		
 	end
 
 	# Fetch the trades for the selected companies
