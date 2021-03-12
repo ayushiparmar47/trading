@@ -23,7 +23,7 @@ class Api::V1::BonusController < ApplicationController
 		wallet_amount = current_api_v1_user.wallet&.totel_amount + @totel
   	if current_api_v1_user.wallet.update_attributes(totel_amount: wallet_amount)
   		@bonus.update_all(collected: true)
-  		render json: { success: true, message: "pay amount has been added in your wallet"}
+  		render json: { success: true, message: "Amount $#{@totel} has been added in your wallet"}
   	else
   		render_error("pay amount has been failed. Please try again later")
   	end
