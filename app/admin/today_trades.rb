@@ -16,7 +16,7 @@ ActiveAdmin.register TodayTrade do
   form do |f|
     f.inputs do
       f.input :company_id, as: :searchable_select, input_html: {:style => 'width:28.5%'}, :collection => Company.all
-      f.input :plans, as: :select, :collection => Plan.all.pluck(:name), multiple: true,input_html: {:style => 'width:20%'}
+      f.input :plans, as: :searchable_select, :collection => Plan.all.pluck(:name), multiple: true,input_html: {:style => 'width:20%'}
     end
     f.actions
   end
