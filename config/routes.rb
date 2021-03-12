@@ -43,6 +43,11 @@ Rails.application.routes.draw do
         end
       end
       resources :history_trades , only: [:index] 	
+      resources :bonus, only: [:index] do
+        collection do
+          post 'collect_bonus'
+        end
+      end
       post "/reset_password" => "users#reset_password"      
       post "/set_news_letter" => "users#set_news_letter"
       get "/get_todays_trades" => "companies#get_todays_trades" 

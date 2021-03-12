@@ -2,10 +2,13 @@ ActiveAdmin.register PayAmount do
 
 	member_action :pay, method: :post do
 		user = resource.user
-		totel_amount = user&.wallet&.totel_amount + resource.amount
-		user&.wallet.update_attributes(totel_amount: totel_amount)
-		resource.update(status: 1, payed: true)
-		flash[:notice] = ('Pay amount to user successesfull.') 
+    bonus = user.bonus.build(amount: resource.amount)
+    if bonus.save
+  		resource.update(status: 1, payed: true)
+  		flash[:notice] = ('pay amount has succeeded.') 
+    else
+      flash[:error] = ('pay amount has failed. Please try again later')
+    end
 	  redirect_to admin_pay_amounts_path
   end
 

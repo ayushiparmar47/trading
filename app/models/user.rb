@@ -35,6 +35,7 @@ class User < ApplicationRecord
   has_many :mobile_devices, dependent: :destroy
   has_many :pay_amounts, dependent: :destroy
   has_many :payments, dependent: :destroy
+  has_many :bonus
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable,:confirmable ,:token_authenticatable
