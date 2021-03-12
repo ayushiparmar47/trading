@@ -16,6 +16,7 @@ ActiveAdmin.register HistoryTrade do
     id_column
     column :company_name
     column :symbol
+    column :plans
     column :created_at
     actions
   end
@@ -28,6 +29,7 @@ ActiveAdmin.register HistoryTrade do
     attributes_table do
       row :company_name
       row :symbol
+      roe :plans
       row :created_at
     end
   end
