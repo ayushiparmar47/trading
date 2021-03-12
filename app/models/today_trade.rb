@@ -8,7 +8,7 @@ class TodayTrade < ApplicationRecord
   end
 
   def add_history
-  	HistoryTrade.create(company_name: self.company&.name, symbol: self.company&.symbol)
+  	HistoryTrade.create(company_name: self.company&.name, symbol: self.company&.symbol, plans: self.plans)
   end
 
 end
