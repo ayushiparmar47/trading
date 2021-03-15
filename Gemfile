@@ -33,10 +33,7 @@ gem 'redis', '~> 3.3', '>= 3.3.1'
 
 gem 'pry'
 gem 'turbolinks'
-
-gem 'redis', '~> 4.0'
-# gem 'sidekiq', '~> 5.0.5' 
-
+ 
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'jquery-rails'
 
