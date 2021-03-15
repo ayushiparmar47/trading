@@ -35,8 +35,12 @@ Rails.application.configure do
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
+  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]  
+
   # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
 
+  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/, 'wss://m-works-protonshub.herokuapp.com/cable','ws://m-works-protonshub.herokuapp.com/cable','http://m-works-protonshub.herokuapp.com/cable', 'https://m-works-protonshub.herokuapp.com/cable']
+  
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
@@ -87,8 +91,8 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_options = {from: 'parmarayushi17@gmail.com'}
-  config.action_mailer.default_url_options = { :host => "desolate-ravine-19733.herokuapp.com" }
+  config.action_mailer.default_options = {from: 'parmarayushi17@gmail.com'}  
+  config.action_mailer.default_url_options = { :host => "m-works-protonshub.herokuapp.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
@@ -98,5 +102,5 @@ Rails.application.configure do
     password:             'shishi-4321',
     authentication:       'plain' 
   }
-  config.asset_host = 'https://desolate-ravine-19733.herokuapp.com'
+  config.asset_host = 'https://m-works-protonshub.herokuapp.com'
 end

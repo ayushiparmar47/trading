@@ -4,16 +4,10 @@ development:
 test:
   adapter: async
 
+staging:
+  adapter: redis
+  url: redis://localhost:6379
+ 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  channel_prefix: tradingg_production
-
- 
- # staging:
- #   adapter: redis
- #   url: redis://localhost:6379
-  
- # production:
- #   adapter: redis
- #   url: redis://localhost:6379
+  url: redis://localhost:6379

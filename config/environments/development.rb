@@ -12,6 +12,8 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  config.force_ssl = true
+
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
@@ -43,7 +45,11 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+                                                            
+  config.action_cable.url = 'wss://localhost:3000/cable'     
 
+  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
+  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/, 'wss://m-works-protonshub.herokuapp.com/cable','ws://m-works-protonshub.herokuapp.com/cable','http://m-works-protonshub.herokuapp.com/cable', 'https://m-works-protonshub.herokuapp.com/cable']
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
@@ -53,7 +59,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default_options = {from: 'parmarayushi17@gmail.com'}
-  config.action_mailer.default_url_options = { :host => "desolate-ravine-19733.herokuapp.com" }
+  config.action_mailer.default_url_options = {:host => "m-works-protonshub.herokuapp.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
   address:              'smtp.gmail.com',
