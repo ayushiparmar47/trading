@@ -20,7 +20,9 @@ class Api::V1::SessionsController < Devise::SessionsController
           # user = warden.authenticate!(:scope => :user)
           token = Tiddle.create_and_return_token(user, request)
           #render json: {success: true, message: "User Successfully Signed in ",user: user.as_json.merge({token: token})}
-          render_object(user, 'user', "User Successfully Signed in", token: token)
+          # render_object(user, 'user', "User Successfully Signed in", token: token)
+          tickets_analyzed_count = user.user_analyzed_trades.count
+          render json: {success: true, message: "User Successfully Signed in",user: user, token: token, tickets_analyzed_count: tickets_analyzed_count}
         else
           render json: {success: false, message: "Email or Password is Invalid"}, status: 404
         end

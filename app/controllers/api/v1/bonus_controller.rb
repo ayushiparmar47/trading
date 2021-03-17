@@ -10,7 +10,7 @@ class Api::V1::BonusController < ApplicationController
 			end
 			render_collection(@bonus, 'bonus', Bonu, "User Bonus ...!", totel: @totel)
 		else
-			render_error("Not avalable any bonus...!")
+			render_error("Not available any bonus...!")
 		end
 	end
 
@@ -25,7 +25,7 @@ class Api::V1::BonusController < ApplicationController
   		@bonus.update_all(collected: true)
   		render json: { success: true, message: "Amount $#{@totel} has been added in your wallet"}
   	else
-  		render_error("pay amount has been failed. Please try again later")
+  		render_error("Pay amount has been failed. Please try again later")
   	end
 	end
 

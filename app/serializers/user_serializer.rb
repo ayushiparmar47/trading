@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :email, :news_letter, :subscribed, :referral_code, :short_bio, :image, :trading_exp, :referrer_id
+  attributes :id, :first_name, :email, :news_letter, :subscribed, :referral_code, :short_bio, :image, :trading_exp, :referrer_id, :created_at
 
   has_many :subscriptions
   has_many :plans, through: :subscriptions, dependent: :destroy
