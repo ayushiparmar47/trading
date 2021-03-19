@@ -140,16 +140,9 @@ class Api::V1::UsersController < ApplicationController
         @user_analyzed_trades.each_with_index do |d,i|
           symbol = d.company.symbol
           company_details = FinnhubApi::fetch_company_profile symbol
-          # expected_rate = d.today_trade.expected_rate
           current_rate = d.analyzed_rate
-
-          # COMMENTED FOR EXPECTED RATE
-          # expected_rate = d.company_expected_rate
-          # day_gain_or_loss, gain_or_loss_per, status = calculate_day_gain current_rate, expected_rate, status
-          # data = {logo: company_details["logo"],trade_id: d.today_trade.id, company_id: d.today_trade.company.id , symbol: d.today_trade.company.symbol, name: d.today_trade.company.name, current_rate: current_rate, expected_rate: expected_rate, day_gain_or_loss: day_gain_or_loss, gain_or_loss_per: "#{gain_or_loss_per}%", status: status }
           data = {logo: company_details["logo"], company_id: d.company.id , symbol: d.company.symbol, name: d.company.name, analyzed_current_rate: current_rate}
           data_array << data
-          # data_hash["analyzed_trade_#{i+1}"] = data
         end
         render json: {success: true, message: "Analyzed Trades" , data: data_array }
       else
@@ -157,18 +150,6 @@ class Api::V1::UsersController < ApplicationController
       end
     else
       render_error("Sign in first")
-    end
-  end
-
-  def calculate_day_gain current, expected, status = nil
-    if expected < current
-      gain = (current - expected)
-      gain_per = (gain*100/expected)
-      return gain.round(2) , gain_per.round(2), "Gain"
-    else
-      loss = (expected - current).abs
-      loss_per = (loss*100/expected)
-      return loss.round(2) , loss_per.round(2), "Loss"
     end
   end
 
