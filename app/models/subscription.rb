@@ -26,8 +26,8 @@ class Subscription < ApplicationRecord
         end
       end
     end 
-    # Delayed::Job.enqueue(SubscriptionJob.new(self), 0, self&.end_date&.getutc - 3.day)
-    # Delayed::Job.enqueue(SubscriptionExpireJob.new(self), 0, self&.end_date&.getutc) 
+    SubscriptionJob.set(wait_until: self&.end_date&.getutc - 3.day).perform_later(self)
+    SubscriptionExpireJob.set(wait_until: self&.end_date&.getutc).perform_later(self)
   end
 
   def get_amount(amount, discount)
