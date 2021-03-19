@@ -11,7 +11,7 @@ class NewsLetter < ApplicationRecord
 		if check_field_changed?
 			@users = User.where(news_letter: true)
 			@users.each do |user|
-				Delayed::Job.enqueue(NewsLetterJob.new(self, user))
+				NewsLetterJob.perform_later(self, user)
 			end
 		end
 	end
