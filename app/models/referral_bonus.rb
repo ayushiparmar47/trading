@@ -15,7 +15,7 @@ class ReferralBonus < ApplicationRecord
 
   def create_offer_job
   	if self.active?
-  		# Delayed::Job.enqueue(OfferJob.new(self), 0, self&.end_date&.getutc)
+  		OfferJob.set(wait_until: self&.end_date&.getutc).perform_later(self)
   	end
   end
 end
