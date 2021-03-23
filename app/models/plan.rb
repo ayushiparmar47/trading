@@ -4,7 +4,9 @@ class Plan < ApplicationRecord
 	
  	has_many :subscriptions
   has_many :users, through: :subscriptions, dependent: :destroy
-
+  has_many :trade_plans, dependent: :destroy
+  has_many :today_trades, through: :trade_plans
+  #validates :name, uniqueness: { case_sensitive: false }
   validates :name, presence: true
   validates :trial_day, presence: true
   validates :amount, presence: true

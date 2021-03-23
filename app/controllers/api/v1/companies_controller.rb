@@ -6,7 +6,8 @@ class Api::V1::CompaniesController < ApplicationController
 	def get_todays_trades
 		if current_api_v1_user.plans.present?
 			user_plans = current_api_v1_user.plans.pluck(:name)
-			@trades = TodayTrade.all.select{|tt| tt.plans.include? user_plans.first}
+			@trades = current_api_v1_user.plans.first.today_trades
+			# @trades = TodayTrade.all.select{|tt| tt.plans.include? user_plans.first}
 			@today_trades = fetch_trades @trades
 			render json: {success: true, message: "Today's Trade", data: @today_trades.as_json}, status: 200
 		else
