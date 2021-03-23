@@ -1,7 +1,6 @@
 ActiveAdmin.register Plan do
   menu parent: "Plan"
   permit_params :name, :currency, :interval, :interval_count, :amount, :stripe_plan_id, :stripe_product_id, :trial_day, :country
-  actions :all, :except => [:edit]
   
   controller do
     def create 
