@@ -15,7 +15,6 @@ class TodayTrade < ApplicationRecord
   # end
 
   def add_history
-    debugger
   	HistoryTrade.create(company_name: self.company&.name, symbol: self.company&.symbol, plans: self.plans.pluck(:id))
   end
 
