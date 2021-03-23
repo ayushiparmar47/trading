@@ -4,18 +4,7 @@ ActiveAdmin.register Plan do
   actions :all, :except => [:edit]
   
   controller do
-    def create
-      stripe_product = Stripe::Product.create({name: params[:plan][:name], type: 'service'})
-      stripe_plan = Stripe::Plan.create({
-        amount: params[:plan][:amount].to_i,
-        currency: params[:plan][:currency],
-        interval: params[:plan][:interval],
-        product: stripe_product.id,
-        interval_count: params[:plan][:interval_count],
-        nickname: params[:plan][:name],
-      })
-      params[:plan][:stripe_plan_id] =  stripe_plan.id
-      params[:plan][:stripe_product_id] =  stripe_product.id   
+    def create 
       create! 
     end
     
