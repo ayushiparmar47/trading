@@ -13,21 +13,6 @@ desc "This task will fetch the company name and symbol"
 			Rails.logger.info "-- #{com_name} --"
 			symbol = res["symbol"]
 			Rails.logger.info "=== #{symbol} ==="
-			Company.create(name: com_name , symbol: symbol)
-		end
-	end
-
-desc "Task for fetching comapany name and symbols every 24 hrs"
-	task :fetch_company_details_every_24_hrs => :environment do
-		Rails.logger.info "Trends Details"
-		response = FinnhubApi::get_companies_symbols
-	 	Rails.logger.info "***** #{response} *****"
-		response.each do |res|
-			# Rails.logger.info "---- #{res} ----"
-			com_name = res["description"]
-			Rails.logger.info "-- #{com_name} --"
-			symbol = res["symbol"]
-			Rails.logger.info "=== #{symbol} ==="
 			Company.find_or_create_by(name: com_name , symbol: symbol)
 		end
 	end
