@@ -42,7 +42,7 @@
   form do |f|
     f.inputs do
       f.input :company_id, as: :searchable_select, input_html: {:style => 'width:28.5%'}, :collection => Company.all
-      f.input :plan_ids, as: :searchable_select, :collection => Plan.all, multiple: true,include_hidden: false,input_html: {:style => 'width:20%'}
+      f.input :plan_ids, as: :searchable_select, :collection => Plan.all, multiple: true,include_blank: true,input_html: {:style => 'width:20%'}
     end
     f.actions
   end

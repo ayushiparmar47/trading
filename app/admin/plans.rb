@@ -1,7 +1,6 @@
 ActiveAdmin.register Plan do
   menu parent: "Plan"
   permit_params :name, :currency, :interval, :interval_count, :amount, :stripe_plan_id, :stripe_product_id, :trial_day, :country
-  
   controller do
     def create 
       create! 
@@ -20,6 +19,7 @@ ActiveAdmin.register Plan do
     @currency_code = currency&.currency_code 
     render json: @currency_code, status: 200
   end
+  # actions :all, :except => [:destroy]
   
   index do
      selectable_column
@@ -37,7 +37,7 @@ ActiveAdmin.register Plan do
       column :currency
       column :stripe_plan_id
       column :created_at
-    actions
+      actions 
   end
 
   filter :name
